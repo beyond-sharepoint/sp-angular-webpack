@@ -18,9 +18,10 @@ angular.module(MODULE_NAME, [
    ngSharePoint,
    samples
 ])
+    .controller('AppCtrl', [ AppCtrl ])
     .component('app', {
         template: require('./app.aspx'),
-        controller: AppCtrl,
+        controller: 'AppCtrl',
         controllerAs: 'app'
     })
     .config(['$provide', '$stateProvider', '$locationProvider', '$httpProvider', '$urlRouterProvider', '$compileProvider', 'cfpLoadingBarProvider',
