@@ -1,0 +1,20 @@
+.flex-center {
+    display: flex;
+    justify-content: center;
+}
+
+.flex-center-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.forms-grid {
+    height: 100%;
+    width: 100%;
+}
+
+.forms-list-details {
+    padding-top: 5px;
+    font-size: 10px;
+}

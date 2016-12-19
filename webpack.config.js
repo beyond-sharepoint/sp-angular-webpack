@@ -37,14 +37,14 @@ module.exports = function makeWebpackConfig() {
   } else if (isProd) {
     config.devtool = 'source-map';
   } else {
-    config.devtool = 'eval-cheap-source-map';
+    config.devtool = 'eval-source-map';
   }
 
   config.module = {
     preLoaders: [],
     loaders: [
       //Delicious ES2015 code, made simple for simpleton browsers.
-      { test: /\.js$/, loader: 'babel-loader', exclude: /(node_modules|bower_components)/},
+      { test: /\.js$/, loader: 'babel-loader', exclude: /(node_modules|bower_components)/ },
       { test: /\.css$/, loader: isTest ? 'null-loader' : ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader') },
       { test: /\.json$/, loader: "json-loader" },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=200000&mimetype=application/font-woff&name=[hash].[ext]" },
@@ -84,7 +84,7 @@ module.exports = function makeWebpackConfig() {
         inject: 'body'
       }),
 
-      new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js"),
+      new webpack.optimize.CommonsChunkPlugin("vendor", "/scripts/vendor.bundle.js"),
 
       new ExtractTextPlugin('/styles/[name].[hash].css', { disable: !isProd })
     )

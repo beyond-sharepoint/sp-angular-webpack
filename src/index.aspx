@@ -58,7 +58,7 @@
             height: 4px;
             width: 0%;
             max-width: 100%;
-            animation: progress 2.5s 1 forwards;
+            animation: progress 0.5s 1 forwards;
         }
         
         @keyframes progress {
