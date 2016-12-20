@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rimraf dist && webpack --bail --progress --profile",
     "build-proxy": "rimraf dist && webpack --bail --progress --profile --config webpack-hostwebproxy.config.js",
-    "server": "webpack-dev-server --history-api-fallback --inline --progress",
+    "server": "webpack-dashboard -- webpack-dev-server --history-api-fallback --inline --progress",
     "test": "karma start",
     "test-watch": "karma start --auto-watch --no-single-run",
     "start": "npm run server"
@@ -66,6 +66,7 @@
     "ng-cache-loader": "0.0.21",
     "node-libs-browser": "^2.0.0",
     "null-loader": "^0.1.1",
+    "open-browser-webpack-plugin": "0.0.3",
     "phantomjs-prebuilt": "^2.1.4",
     "postcss-loader": "^1.1.1",
     "raw-loader": "^0.5.1",

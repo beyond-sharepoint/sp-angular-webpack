@@ -28,7 +28,19 @@ module.exports = {
         ],
         loaders: [
             //Delicious ES2015 code, made simple for simpleton browsers.
-            { test: /\.js$/, loader: 'babel-loader', exclude: /(node_modules|bower_components)/ },
+            {
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                loader: 'babel-loader',
+                query: {
+                    presets: ['es2015'],
+                    plugins: [
+                        "transform-runtime",
+                        "transform-async-to-generator",
+                        "transform-flow-strip-types"
+                    ]
+                }
+            },
             { test: /\.css$/, loader: 'null-loader' },
             { test: /\.json$/, loader: "json-loader" },
             { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=200000&mimetype=application/font-woff&name=[hash].[ext]" },

@@ -7,6 +7,8 @@ const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const DashboardPlugin = require('webpack-dashboard/plugin');
+const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 
 module.exports = {
     name: 'app-dev',
@@ -19,7 +21,19 @@ module.exports = {
         preLoaders: [],
         loaders: [
             //Delicious ES2015 code, made simple for simpleton browsers.
-            { test: /\.js$/, loader: 'babel-loader', exclude: /(node_modules|bower_components)/ },
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                exclude: /(node_modules|bower_components)/,
+                query: {
+                    presets: ['es2015'],
+                    plugins: [
+                        "transform-runtime",
+                        "transform-async-to-generator",
+                        "transform-flow-strip-types"
+                    ]
+                }
+            },
             { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader') },
             { test: /\.json$/, loader: "json-loader" },
             { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=200000&mimetype=application/font-woff&name=[hash].[ext]" },
@@ -41,7 +55,9 @@ module.exports = {
         }),
 
         new webpack.optimize.CommonsChunkPlugin("vendor", "/scripts/vendor.bundle.js"),
-        new ExtractTextPlugin('/styles/[name].[hash].css', { disable: true })
+        new ExtractTextPlugin('/styles/[name].[hash].css', { disable: true }),
+        new DashboardPlugin(),
+        new OpenBrowserPlugin({ url: 'http://localhost:8080' })
     ],
     postcss: [
         autoprefixer({

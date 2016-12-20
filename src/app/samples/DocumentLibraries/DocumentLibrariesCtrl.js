@@ -1,4 +1,4 @@
-import spConfig from '../../../config.json';
+import spConfig from '../../../HostWebProxy.config.json';
 
 class DocumentLibrariesCtrl {
     constructor($ngSharePointConfig, $SPContext, $scope, $state, $window, $uibPosition) {

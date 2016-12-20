@@ -12,6 +12,7 @@ module.exports = {
     name: 'app-prod',
     devtool: 'source-map',
     entry: {
+        'babel-polyfill': 'babel-polyfill',
         'vendor': './src/vendor.js',
         'app': './src/app.js'
     },
@@ -25,7 +26,11 @@ module.exports = {
                 loader: 'babel-loader',
                 query: {
                     presets: ['es2015'],
-                    plugins: ["transform-runtime", "transform-async-to-generator"]
+                    plugins: [
+                        "transform-runtime",
+                        "transform-async-to-generator",
+                        "transform-flow-strip-types"
+                    ]
                 }
             },
             { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader') },
@@ -51,7 +56,7 @@ module.exports = {
         new ExtractTextPlugin('/styles/[name].[hash].css'),
         new webpack.NoErrorsPlugin(),
         new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin(),
+        new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}}),
         new CopyWebpackPlugin([{
             from: path.join(__dirname, '/src/assets')
         }])

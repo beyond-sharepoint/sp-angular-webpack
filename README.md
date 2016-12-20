@@ -13,11 +13,10 @@ $ cd my-app
 
 # install the dependencies with npm
 $ npm install
-```
 
-Edit /app/config.json and update with your SharePoint Urls
+# update the configuration file with information about your sharepoint site
+$ echo '{"siteUrl": "--your sharepoint site url--"}' > /app/HostWebProxy.config.js
 
-``` bash
 # build HostWebProxy.aspx
 $ npm run build-proxy
 ```
@@ -32,7 +31,8 @@ feel free to change this (and the corresponding configuration) to whatever you w
 ``` bash
 # start the server
 $ npm start
-
 ```
 
-You'll be able to open a browser to http://localhost:8080 and view the samples that use data from your SharePoint web.
+At this point a browser will be opened to the sample app.
+
+> Note: While this starter will work for SharePoint on-prem, additional steps need to be taken.

@@ -11,7 +11,7 @@ class SPWeb {
     }
 
     async getListBySiteRelativeUrl(siteRelativeUrl, expand, select) {
-
+        
         siteRelativeUrl = await this._context.getSiteRelativeUrl(siteRelativeUrl);
         let uri = URI.joinPaths("/_api/web/", `getlist('${URI.encode(siteRelativeUrl)}')`);
 

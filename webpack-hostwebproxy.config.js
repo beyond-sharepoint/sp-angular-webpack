@@ -7,11 +7,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const proxyConfig = require('./src/config.json');
+const proxyConfig = require('./src/HostWebProxy.config.json');
 
 module.exports = {
     name: 'host-web-proxy',
-    entry: './src/HostWebProxy.js',
+    entry: ['babel-polyfill', './src/HostWebProxy.js'],
     module: {
         preLoaders: [],
         loaders: [
@@ -22,7 +22,11 @@ module.exports = {
                 loader: 'babel-loader',
                 query: {
                     presets: ['es2015'],
-                    plugins: ["transform-runtime", "transform-async-to-generator"]
+                    plugins: [
+                        "transform-runtime",
+                        "transform-async-to-generator",
+                        "transform-flow-strip-types"
+                    ]
                 }
             },
             { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader') },
@@ -55,7 +59,7 @@ module.exports = {
         new HtmlWebpackInlineSourcePlugin(),
         new webpack.NoErrorsPlugin(),
         new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin()
+        new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}})
     ],
     postcss: [
         autoprefixer({

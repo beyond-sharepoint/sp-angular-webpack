@@ -45,7 +45,7 @@ module.exports = function karmaConfig (config) {
       ]
     },
 
-    webpack: require('./webpack.config'),
+    webpack: require('./webpack-app-test.config'),
 
     // Hide webpack build information from output
     webpackMiddleware: {
