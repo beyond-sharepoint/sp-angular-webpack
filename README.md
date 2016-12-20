@@ -6,7 +6,7 @@ Starter project for creating apps with client-side technologies in SharePoint us
 
 ``` bash
 # clone the repo
-$ git clone https://github.com/beyond-sharepoint/sp-angular-webpack.git my-app
+$ git clone https://github.com/beyond-sharepoint/sp-angular-webpack/ my-app
 
 # change directory to your app
 $ cd my-app
