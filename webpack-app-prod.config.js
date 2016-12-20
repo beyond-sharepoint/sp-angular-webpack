@@ -9,6 +9,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+    name: 'app-prod',
     devtool: 'source-map',
     entry: {
         'vendor': './src/vendor.js',
@@ -41,11 +42,6 @@ module.exports = {
         filename: '/scripts/[name].[hash].js',
         chunkFilename: '/scripts/[name].[hash].js'
     },
-    postcss: [
-        autoprefixer({
-            browsers: ['last 2 version']
-        })
-    ],
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.aspx',
@@ -59,5 +55,10 @@ module.exports = {
         new CopyWebpackPlugin([{
             from: path.join(__dirname, '/src/assets')
         }])
+    ],
+    postcss: [
+        autoprefixer({
+            browsers: ['last 2 version']
+        })
     ]
 };

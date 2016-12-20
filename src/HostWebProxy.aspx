@@ -7,14 +7,13 @@
 		<meta name="GENERATOR" content="Microsoft SharePoint" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="Expires" content="0" />
-		<title>SharePoint Liberator Message Sink</title>
-		<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+		<title>SharePoint Host Web Proxy</title>
 	</head>
 
 	<body>
 		<script type="text/javascript">
 			var ajax = function(request, origin) {
-		
+
 			request.success = function(data, textStatus, jqXHR) {
 				postMessage({
 					postMessageId: request.postMessageId,
@@ -39,8 +38,8 @@
 		};
 
 		var validateOrigin = function(origin) {
-			//TODO: Implement your origin validation here.
-			//e.g. if (origin !== "http://yourhosthere") return false;
+			if (origin !== "{{siteUrl}}")
+				return false;
 			
 			return true;
 		}

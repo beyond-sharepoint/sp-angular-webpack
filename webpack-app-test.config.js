@@ -9,6 +9,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+    name: 'app-test',
     devtool: 'inline-source-map',
     entry: {},
     module: {
