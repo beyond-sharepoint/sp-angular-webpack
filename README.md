@@ -17,11 +17,16 @@ $ npm install
 
 Edit /app/config.json and update with your SharePoint Urls
 
-At this point you'll need to manually upload the HostWebProxy file from my-app/assets/HostWebProxy.aspx to your sharepoint web.
+``` bash
+# build HostWebProxy.aspx
+$ npm run build-proxy
+```
+
+At this point you'll need to manually upload ./dist/HostWebProxy.aspx to your SharePoint web.
 
 This file allows for cross-domain communication to your app.
 
-The default location is /Shared%20Documents/HostWebProxy.aspx, however
+The default target location is /Shared%20Documents/HostWebProxy.aspx, however
 feel free to change this (and the corresponding configuration) to whatever you wish.
 
 ``` bash
@@ -30,4 +35,4 @@ $ npm start
 
 ```
 
-You'll be able to open a browser to http://localhost:8080 and view the samples that use data from your sharepoint web.
+You'll be able to open a browser to http://localhost:8080 and view the samples that use data from your SharePoint web.
