@@ -7,8 +7,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const proxyConfig = require('./src/HostWebProxy.config.json');
-
 module.exports = {
     name: 'host-web-proxy',
     entry: ['babel-polyfill', './src/HostWebProxy.js'],
@@ -30,14 +28,7 @@ module.exports = {
                 }
             },
             { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader') },
-            {
-                test: /\.aspx$/,
-                loader: 'string-replace',
-                query: {
-                    search: '{{siteUrl}}',
-                    replace: proxyConfig.siteUrl
-                }
-            },
+            { test: /\.json$/, loader: "json-loader" },
             {
                 test: /\.aspx$/,
                 loader: 'raw-loader'

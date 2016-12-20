@@ -1,13 +1,11 @@
-import spConfig from '../../../HostWebProxy.config.json';
-
 class DocumentLibrariesCtrl {
     constructor($ngSharePointConfig, $SPContext, $scope, $state, $window, $uibPosition) {
         this.isLoading = true;
         
-        this._context = $SPContext(spConfig.siteUrl, {
+        this._context = $SPContext($ngSharePointConfig.siteUrl, {
             authenticationReturnSettings: {
                 query: {
-                    target: spConfig.siteUrl,
+                    target: $ngSharePointConfig.siteUrl,
                     go: true
                 }
             }

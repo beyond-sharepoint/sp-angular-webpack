@@ -13,32 +13,40 @@ class Channel {
     /**
      * Fire and forget pattern that sends the command to the target without waiting for a response.
      */
-    invokeDirect(command, data, domain) {
+    invokeDirect(command, data, targetOrigin) {
         if (!data) {
             data = {};
         }
 
-        if (!domain) {
-            domain = "*";
+        if (!targetOrigin) {
+            targetOrigin = this.config.siteUrl;
+        }
+
+        if (!targetOrigin) {
+            targetOrigin = "*";
         }
 
         data = _.cloneDeep(data);
         data.command = command;
         data.postMessageId = `SP.RequestExecutor_${this.messageCounter++}`;
 
-        this._contentWindow.postMessage(JSON.stringify(data), domain);
+        this._contentWindow.postMessage(JSON.stringify(data), targetOrigin);
     }
 
     /**
      * Invokes the specified command on the channel with the specified data, constrained to the specified domain awaiting for max ms specified in timeout 
      */
-    async invoke(command, data, domain, timeout) {
+    async invoke(command, data, targetOrigin, timeout) {
         if (!data) {
             data = {};
         }
+        
+        if (!targetOrigin) {
+            targetOrigin = this.config.siteUrl;
+        }
 
-        if (!domain) {
-            domain = "*";
+        if (!targetOrigin) {
+            targetOrigin = "*";
         }
 
         if (!timeout) {
@@ -61,7 +69,7 @@ class Channel {
                 reject(`invoke() timed out while waiting for a response while executing ${data.command}`);
             }, timeout);
         }
-
+        
         let self = this;
         let removeMonitor = this.$rootScope.$on(this.config.crossDomainMessageSink.incomingMessageName, function (event, response) {
             if (response.postMessageId !== data.postMessageId)
@@ -79,7 +87,7 @@ class Channel {
                 self.$timeout.cancel(timeoutPromise);
         });
 
-        this._contentWindow.postMessage(JSON.stringify(data), domain);
+        this._contentWindow.postMessage(JSON.stringify(data), targetOrigin);
 
         return promise;
     }

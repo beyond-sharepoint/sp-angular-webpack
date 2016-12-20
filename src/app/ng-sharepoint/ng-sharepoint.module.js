@@ -3,6 +3,7 @@ import CrossDomainMessageSink from './CrossDomainMessageSink.js'
 import ResourceLoader from './ResourceLoader.js'
 import FormLibrary from './FormLibrary.js'
 import SPContext from './SPContext.js'
+import hostWebProxyConfig from '../../HostWebProxy.config.json'
 
 const MODULE_NAME = 'ng-sharepoint';
 
@@ -48,7 +49,8 @@ angular.module(MODULE_NAME, [
         }])
     .provider("$ngSharePointConfig", function () {
         let defaults = {
-            proxyUrl: "/_layouts/15/AppWebProxy.aspx",
+            siteUrl: hostWebProxyConfig.siteUrl,
+            proxyUrl: hostWebProxyConfig.proxyUrl ? hostWebProxyConfig.proxyUrl : "/_layouts/15/AppWebProxy.aspx",
             loginUrl: "/_layouts/15/authenticate.aspx",
             crossDomainMessageSink: {
                 outgoingMessageName: "$ngSharePointMessageSink-Outgoing",
@@ -71,12 +73,17 @@ angular.module(MODULE_NAME, [
             /**
              * Listen for angular broadcast messages that indicate that a message should be sent to the target iFrame.
              * */
-            $rootScope.$on(ngSharePointConfig.crossDomainMessageSink.outgoingMessageName, function (event, message, domain) {
-                if (!domain) {
-                    domain = "*";
+            $rootScope.$on(ngSharePointConfig.crossDomainMessageSink.outgoingMessageName, function (event, message, targetOrigin) {
+                if (!targetOrigin) {
+                    targetOrigin = hostWebProxyConfig.siteUrl;
                 }
+
+                if (!targetOrigin) {
+                    targetOrigin = "*";
+                }
+
                 let sender = $rootScope.sender || $window.parent;
-                return sender.postMessage(message, domain);
+                return sender.postMessage(message, targetOrigin);
             });
 
             /**

@@ -5,7 +5,6 @@ import ngSharePoint from './ng-sharepoint/ng-sharepoint.module.js'
 //Import App styles, controls, etc.
 import './app.css';
 import AppCtrl from './AppCtrl.js'
-import spConfig from '../HostWebProxy.config.json';
 
 //import sub-modules...
 import samples from './samples/samples.module.js';

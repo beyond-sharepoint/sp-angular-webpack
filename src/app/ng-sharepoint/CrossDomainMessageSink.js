@@ -42,8 +42,8 @@ class CrossDomainMessageSink {
 
         let channel;
         this.channels[origin] = channel = new Channel(this.config, this.$rootScope, this.$timeout, eventResult.path[0].contentWindow);
-
-        await channel.invoke("Ping", {}, "*", timeout);
+        
+        await channel.invoke("Ping", {}, null, timeout);
 
         return channel;
     }
