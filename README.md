@@ -40,11 +40,13 @@ At this point a browser will be opened to the sample app.
 TODO:
 
  -[ ] Support transferrable objects in HostWebProxy for large uploads/downloads
+ -[ ] Add an angular http interceptor for any $http requests going to the siteweb
  -[ ] Figure out growth in app.bundle.js
  -[ ] Better debugging experience? (really a bable/webpack thing. maybe document local vars are  off of context_)
 - [ ] Finish Samples (And a few new ones, PDF generation...)
-- [ ] SPO-Deploy
-- [ ] SPO-Deploy-Proxy
+- [ ] Deployment Scripts
+    - [ ] SPO-Deploy
+    - [ ] SPO-Deploy-Proxy
 - [ ] On-Prem Support
   - [ ] Test On-Prem (and document steps!)
   - [ ] SP-Deploy (Requires NTLM Auth Lib)
