@@ -17,18 +17,12 @@ $ npm install
 # update the configuration file with information about your sharepoint site
 $ echo '{"siteUrl": "--your sharepoint site url--"}' > /app/HostWebProxy.config.js
 
-# build HostWebProxy.aspx
-$ npm run build-proxy
-```
+# deploy HostWebProxy.aspx to SharePoint Online (on-prem deploy support is coming)
+# HostWebProxy.aspx allows for cross-domain communication to your app.
+# The default target location is <tenant>/Shared%20Documents/HostWebProxy.aspx
+# You can also deploy this manually through your web browser (run npm run build-proxy, the file is located at ./dist/HostWebProxy.aspx)
+$ npm run deploy-proxy-spo
 
-At this point you'll need to manually upload ./dist/HostWebProxy.aspx to your SharePoint web.
-
-This file allows for cross-domain communication to your app.
-
-The default target location is /Shared%20Documents/HostWebProxy.aspx, however
-feel free to change this (and the corresponding configuration) to whatever you wish.
-
-``` bash
 # start the server
 $ npm start
 ```
@@ -39,15 +33,21 @@ At this point a browser will be opened to the sample app.
 
 TODO:
 
+ -[ ] Add a configure script which modifies ./app/HostWebProxy.config.js
  -[ ] Support transferrable objects in HostWebProxy for large uploads/downloads
  -[ ] Add an angular http interceptor for any $http requests going to the siteweb
  -[ ] Figure out growth in app.bundle.js
  -[ ] Better debugging experience? (really a bable/webpack thing. maybe document local vars are  off of context_)
-- [ ] Finish Samples (And a few new ones, PDF generation...)
+- [ ] Finish Samples
+    - [ ] File Upload
+    - [ ] Document Set
+    - [ ] Pdf Generation/Viewer
+    - [ ] Forms Library browser
+    - [ ] ...
 - [ ] Deployment Scripts
-    - [ ] SPO-Deploy
-    - [ ] SPO-Deploy-Proxy
+    - [ ] Deploy-App-SPO
+    - [X] Deploy-Proxy-SPO
 - [ ] On-Prem Support
   - [ ] Test On-Prem (and document steps!)
-  - [ ] SP-Deploy (Requires NTLM Auth Lib)
-  - [ ] SP-Deploy-Proxy
+  - [ ] Deploy-App-SP (Requires NTLM Auth Lib)
+  - [ ] Deploy-Proxy-SP (Requires NTLM Auth Lib)

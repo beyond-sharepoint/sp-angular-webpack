@@ -40,10 +40,10 @@ class CrossDomainMessageSink {
             timeout = 5 * 1000;
 
         proxyUri.setQuery({ v: (new Date()).getTime() });
-        let eventResult = await this.$resourceLoader.loadIFrame(proxyUri.toString(), "allow-forms allow-scripts allow-same-origin");
-
+        let elemIFrame = await this.$resourceLoader.loadIFrame(proxyUri.toString(), "allow-forms allow-scripts allow-same-origin");
+        
         let channel;
-        this.channels[origin] = channel = new Channel(this.config, this.$rootScope, this.$timeout, eventResult.path[0].contentWindow);
+        this.channels[origin] = channel = new Channel(this.config, this.$rootScope, this.$timeout, elemIFrame.path[0].contentWindow);
 
         await channel.invoke("Ping", {}, null, timeout);
 
