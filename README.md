@@ -31,6 +31,18 @@ At this point a browser will be opened to the sample app.
 
 > Note: While this starter will work for SharePoint on-prem, additional steps need to be taken.
 
+### Settings
+
+If you find yourself deploying often, the following environment variables can be set to minimize typing of credentials.
+
+macOS:
+``` bash
+$ export sp_angular_webpack_username=<yourusername>
+$ export sp_angular_webpack_password=<yourpassword>
+```
+
+use SET on windows.
+
 TODO:
 
  -[ ] Add a configure script which modifies ./app/HostWebProxy.config.js

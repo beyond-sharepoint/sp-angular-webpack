@@ -19,19 +19,25 @@ const app = (function () {
     /**
      * Utility function to retrieve a value from process.env or prompt for it.
      */
-    let getConfiguationValue = Promise.coroutine(function* (config, configName, envName, prompt) {
+    let getConfiguationValue = Promise.coroutine(function* (config, configName, envName, prompt, hideValue) {
         //Use environment variables first.
         config[configName] = process.env[envName];
         
         if (config[configName]) {
-            console.log(chalk.cyan(`Using ${configName} from env: ${config[configName]}`));
+            if (!!!hideValue)
+                console.log(chalk.cyan(`Using ${configName} from env: ${config[configName]}`));
+            else
+                console.log(chalk.cyan(`Using ${configName} from env.`));
             return config[configName];
         }
 
         //If it wasn't there, check the hostWebProxy configuration.
         config[configName] = hostWebProxyConfig[configName];
         if (config[configName]) {
-            console.log(chalk.cyan(`Using ${configName} from HostWebProxy.config.json: ${config[configName]}`));
+            if (!!!hideValue)
+                console.log(chalk.cyan(`Using ${configName} from HostWebProxy.config.json: ${config[configName]}`));
+            else
+                console.log(chalk.cyan(`Using ${configName} from HostWebProxy.config.json.`));
             return config[configName];
         }
 
@@ -48,30 +54,30 @@ const app = (function () {
      * Initializes configuration by retrieving it from .env, environment or prompting for it.
      */
     let init = Promise.coroutine(function* () {
-        yield getConfiguationValue(_config, "siteUrl", "sp-angular-webpack_siteurl", {
+        yield getConfiguationValue(_config, "siteUrl", "sp_angular_webpack_siteurl", {
             type: 'input',
             message: `Enter the url to your SharePoint Online tenant`,
             name: 'siteUrl'
         });
 
-        yield getConfiguationValue(_config, "proxyUrl", "sp-angular-webpack_proxyurl", {
+        yield getConfiguationValue(_config, "proxyUrl", "sp_angular_webpack_proxyurl", {
             type: 'input',
             message: `Enter the relative path to store the proxy file (default is /Shared%20Documents/HostWebProxy.aspx)`,
             default: "/Shared%20Documents/HostWebProxy.aspx",
             name: 'proxyUrl'
         });
 
-        yield getConfiguationValue(_config, "username", "spo-angular-webpack_username", {
+        yield getConfiguationValue(_config, "username", "sp_angular_webpack_username", {
             type: 'input',
             message: `Enter the username for ${_config.siteUrl}`,
             name: 'username'
         });
 
-        yield getConfiguationValue(_config, "password", "spo-angular-webpack_password", {
+        yield getConfiguationValue(_config, "password", "sp_angular_webpack_password", {
             type: 'password',
             message: `Enter the password for ${_config.siteUrl}`,
             name: 'password'
-        });
+        }, true);
     });
 
     let uploadFile = Promise.coroutine(function*(ctx, localFilePath, targetFolderServerRelativeUrl, targetFilename, options) {
