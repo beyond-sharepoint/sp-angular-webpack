@@ -36,3 +36,15 @@ $ npm start
 At this point a browser will be opened to the sample app.
 
 > Note: While this starter will work for SharePoint on-prem, additional steps need to be taken.
+
+TODO:
+
+ -[ ] Figure out growth in app.bundle.js
+ -[ ] Better debugging experience? (really a bable/webpack thing. maybe document local vars are  off of context_)
+- [ ] Finish Samples (And a few new ones, PDF generation...)
+- [ ] SPO-Deploy
+- [ ] SPO-Deploy-Proxy
+- [ ] On-Prem Support
+  - [ ] Test On-Prem (and document steps!)
+  - [ ] SP-Deploy (Requires NTLM Auth Lib)
+  - [ ] SP-Deploy-Proxy
