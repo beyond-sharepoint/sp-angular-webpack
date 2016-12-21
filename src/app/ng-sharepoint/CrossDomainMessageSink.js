@@ -20,6 +20,8 @@ class CrossDomainMessageSink {
 
     /**
      * Creates a new cross-domain messaging channel to the specified proxy url.
+     * If an exception occurs, this indicates that a channel couldn't be created
+     * due to an authentication or other problem.
      */
     async createChannel(proxyUrl, timeout) {
 
@@ -37,12 +39,12 @@ class CrossDomainMessageSink {
         if (!timeout)
             timeout = 5 * 1000;
 
-        proxyUri.addQuery({ v: (new Date()).getTime() });
+        proxyUri.setQuery({ v: (new Date()).getTime() });
         let eventResult = await this.$resourceLoader.loadIFrame(proxyUri.toString(), "allow-forms allow-scripts allow-same-origin");
 
         let channel;
         this.channels[origin] = channel = new Channel(this.config, this.$rootScope, this.$timeout, eventResult.path[0].contentWindow);
-        
+
         await channel.invoke("Ping", {}, null, timeout);
 
         return channel;
