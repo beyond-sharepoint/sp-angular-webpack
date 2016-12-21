@@ -39,6 +39,7 @@ At this point a browser will be opened to the sample app.
 
 TODO:
 
+ -[ ] Support transferrable objects in HostWebProxy for large uploads/downloads
  -[ ] Figure out growth in app.bundle.js
  -[ ] Better debugging experience? (really a bable/webpack thing. maybe document local vars are  off of context_)
 - [ ] Finish Samples (And a few new ones, PDF generation...)
