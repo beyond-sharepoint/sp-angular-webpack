@@ -45,7 +45,7 @@ class SPContext {
      */
     getDefaultHeaders(headers) {
         let result = _.cloneDeep(this.settings.headers);
-        if (this._contextInfo) {
+        if (this.contextInfo) {
             result["X-RequestDigest"] = this.contextInfo.FormDigestValue;
         }
 

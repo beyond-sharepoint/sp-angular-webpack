@@ -46,14 +46,16 @@ use SET on windows.
 TODO:
 
  - [ ] Add a configure run script which modifies ./app/HostWebProxy.config.js
- - [ ] Support transferrable objects in HostWebProxy for large uploads/downloads
- - [ ] Add an angular http interceptor for any $http requests going to the siteweb
+ - [X] Support transferable objects in HostWebProxy for large uploads
+ - [ ] Support large downloads too
+ - [ ] Replace jQuery.ajax with fetch api+polyfill in HostWebProxy
+ - [ ] Add an angular http interceptor for any plain-jane $http requests going to the siteweb
  - [X] Figure out growth in app.bundle.js
  - [X] Better debugging experience? (really a bable/webpack thing. maybe document local vars are  off of context_)
  - [ ] Make promises angular promises so that $scope.$apply doesn't need to be run after an await.
  - [ ] Unit test all the things! (nock them out)
  - [ ] Finish Samples
-    - [ ] File Upload
+    - [X] File Upload
     - [ ] Document Set
     - [ ] Pdf Generation/Viewer
     - [ ] Forms Library browser

@@ -2,9 +2,12 @@ import jQuery from 'jquery'
 jQuery.noConflict();
 import hostWebProxyConfig from './HostWebProxy.config.json'
 
+let _lastTransferredObject = null;
+
 var ajax = function (request) {
 
 	request.success = function (data, textStatus, jqXHR) {
+		_lastTransferredObject = null;
 		postMessage({
 			postMessageId: request.postMessageId,
 			result: "success",
@@ -15,6 +18,7 @@ var ajax = function (request) {
 	};
 
 	request.error = function (jqXHR, textStatus, errorThrown) {
+		_lastTransferredObject = null;
 		postMessage({
 			postMessageId: request.postMessageId,
 			result: "error",
@@ -23,6 +27,11 @@ var ajax = function (request) {
 			errorThrown: errorThrown
 		});
 	};
+
+	if (!!request._useTransferObjectAsBody && _lastTransferredObject) {
+		request.data = _lastTransferredObject;
+		request.processData = false;
+	}
 
 	jQuery.ajax(request);
 };
@@ -48,6 +57,8 @@ jQuery(document).ready(function () {
 					command: "transfer",
 					result: event.originalEvent.data.byteLength
 				});
+
+			_lastTransferredObject = event.originalEvent.data;
 			return;
 		}
 
