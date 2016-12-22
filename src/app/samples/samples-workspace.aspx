@@ -10,7 +10,7 @@
     </div>
     <div class="bs-callout bs-callout-info clearfix">
         <h4>File Upload</h4>
-        <p>Demonstrates a file upload operation.</p>
+        <p>Demonstrates a file upload operation using a transferable ArrayBuffer for large file uploads.</p>
         <div class="pull-right">
             <button class="btn btn-primary" data-ui-sref="samples-file-upload">View</button>
         </div>
