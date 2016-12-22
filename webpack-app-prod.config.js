@@ -10,10 +10,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     name: 'app-prod',
-    devtool: 'source-map',
+    devtool: 'hidden-source-map',
     entry: {
-        'babel-polyfill': 'babel-polyfill',
-        'vendor': './src/vendor.js',
+        'vendor': ['babel-polyfill', './src/vendor.js'],
         'app': './src/app.js'
     },
     module: {

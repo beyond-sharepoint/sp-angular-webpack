@@ -27,7 +27,7 @@ var ajax = function (request) {
 	jQuery.ajax(request);
 };
 
-var postMessage = function (data) {
+let postMessage = function (data) {
 	let targetOrigin = hostWebProxyConfig.originUrl;
 	if (!targetOrigin)
 		targetOrigin = "*";
@@ -35,13 +35,28 @@ var postMessage = function (data) {
 	window.parent.postMessage(JSON.stringify(data), targetOrigin);
 };
 
+//When the document is ready, bind to the 'message' event to recieve messages passed
+//from the parent window via window.postMessage
 jQuery(document).ready(function () {
 
 	jQuery(window).bind("message", function (event) {
 		if (!event.originalEvent.data)
 			return;
+		
+		if (Object.prototype.toString.call(event.originalEvent.data) === "[object ArrayBuffer]") {
+			postMessage({
+					command: "transfer",
+					result: event.originalEvent.data.byteLength
+				});
+			return;
+		}
 
-		var request = JSON.parse(event.originalEvent.data);
+		let dataType = jQuery.type(event.originalEvent.data);
+		if (dataType !== "string") {
+			throw new Error("HostWebProxy: Unexpected data type recieved via PostMessage");
+		}
+
+		let request = JSON.parse(event.originalEvent.data);
 
 		switch (request.command) {
 			case "Fetch":

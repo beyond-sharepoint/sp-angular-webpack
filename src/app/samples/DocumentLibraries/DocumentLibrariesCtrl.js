@@ -1,5 +1,5 @@
 class DocumentLibrariesCtrl {
-    constructor($ngSharePointConfig, $SPContext, $scope, $state, $window, $uibPosition) {
+    constructor($ngSharePointConfig, $SPContext, $scope, $state) {
         this.isLoading = true;
         
         this._context = $SPContext($ngSharePointConfig.siteUrl, {
@@ -10,9 +10,6 @@ class DocumentLibrariesCtrl {
                 }
             }
         });
-        
-        var workspace = $window.document.querySelector('#app-workspace-main');
-        this.position = $uibPosition.position(workspace);
 
         this.gridOptions = {
             enableSorting: true,

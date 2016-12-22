@@ -12,9 +12,10 @@ const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 
 module.exports = {
     name: 'app-dev',
-    devtool: 'eval-source-map',
+    debug: true,
+    devtool: 'cheap-module-eval-source-map',
     entry: {
-        'vendor': './src/vendor.js',
+        'vendor': ['babel-polyfill', 'core-js', './src/vendor.js'],
         'app': './src/app.js'
     },
     module: {
@@ -46,7 +47,9 @@ module.exports = {
         path: path.join(__dirname, '/dist'),
         publicPath: 'http://localhost:8080/',
         filename: '/scripts/[name].bundle.js',
-        chunkFilename: '/scripts/[name].bundle.js'
+        chunkFilename: '/scripts/[name].bundle.js',
+        devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+        pathinfo: true
     },
     plugins: [
         new HtmlWebpackPlugin({

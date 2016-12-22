@@ -13,12 +13,13 @@ angular.module(MODULE_NAME, [
     'ng-sharepoint',
     'ui.bootstrap',
     'ui.router.state',
+    'ngFileUpload',
     'ui.grid',
     'ui.grid.autoResize',
     'ui.grid.resizeColumns',
     'ui.grid.moveColumns'
 ])
-    .controller('DocumentLibrariesCtrl', ['$ngSharePointConfig', '$SPContext', '$scope', '$state', '$window', '$uibPosition', DocumentLibrariesCtrl])
+    .controller('DocumentLibrariesCtrl', ['$ngSharePointConfig', '$SPContext', '$scope', '$state', DocumentLibrariesCtrl])
     .controller('FileUploadCtrl', ['$ngSharePointConfig', '$SPContext', '$scope', '$state', FileUploadCtrl])
      .controller('DocumentSetsCtrl', ['$ngSharePointConfig', '$SPContext', '$scope', '$state', DocumentSetsCtrl])
     .config(['$stateProvider', function ($stateProvider) {

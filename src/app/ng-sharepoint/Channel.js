@@ -40,7 +40,7 @@ class Channel {
         if (!data) {
             data = {};
         }
-        
+
         if (!targetOrigin) {
             targetOrigin = this.config.siteUrl;
         }
@@ -69,7 +69,7 @@ class Channel {
                 reject(`invoke() timed out while waiting for a response while executing ${data.command}`);
             }, timeout);
         }
-        
+
         let self = this;
         let removeMonitor = this.$rootScope.$on(this.config.crossDomainMessageSink.incomingMessageName, function (event, response) {
             if (response.postMessageId !== data.postMessageId)
@@ -89,6 +89,57 @@ class Channel {
 
         this._contentWindow.postMessage(JSON.stringify(data), targetOrigin);
 
+        return promise;
+    }
+
+    async transfer(buffer, targetOrigin, timeout) {
+        if (!buffer || Object.prototype.toString.call(buffer) !== '[object ArrayBuffer]')
+            throw new Error("An ArrayBuffer must be specified as the first argument.");
+
+        if (!targetOrigin) {
+            targetOrigin = this.config.siteUrl;
+        }
+
+        if (!targetOrigin) {
+            targetOrigin = "*";
+        }
+
+        if (!timeout) {
+            timeout = 0;
+        }
+
+        //Ensure that the response's length matches.
+        let bufferLength = buffer.byteLength;
+
+        let resolve, reject;
+        let promise = new Promise(function () {
+            resolve = arguments[0];
+            reject = arguments[1];
+        });
+
+        let timeoutPromise;
+        if (timeout > 0) {
+            timeoutPromise = this.$timeout(function () {
+                reject(`transfer() timed out while waiting for a response.`);
+            }, timeout);
+        }
+
+        let self = this;
+        let removeMonitor = this.$rootScope.$on(this.config.crossDomainMessageSink.incomingMessageName, function (event, response) {
+            
+            if (response.result !== bufferLength) {
+                reject(response);
+            }
+            else {
+                resolve(response);
+            }
+
+            removeMonitor();
+            if (timeoutPromise)
+                self.$timeout.cancel(timeoutPromise);
+        });
+
+        this._contentWindow.postMessage(buffer, targetOrigin, [buffer]);
         return promise;
     }
 }

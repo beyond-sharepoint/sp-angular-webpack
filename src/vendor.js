@@ -1,10 +1,10 @@
 //Entry point for loading any css/libraries.
 //Makes app.bundle.js smaller to ease debugging as well.
-
 import 'bootstrap/dist/css/bootstrap.css'
 import 'font-awesome/css/font-awesome.css'
 import 'office-ui-fabric-core/dist/css/fabric.css'
 
+import 'core-js'
 import 'bluebird'
 import 'lodash'
 import 'moment'

@@ -169,6 +169,22 @@ class SPContext {
         return response.data.d;
     };
 
+    /**
+     * Transfers an array buffer to the proxy.
+     * Use this method when large amounts of data need to be used by fetch.
+     */
+    async transfer(buffer) {
+        if (!buffer || Object.prototype.toString.call(buffer) !== '[object ArrayBuffer]')
+            throw new Error("An ArrayBuffer must be specified as the first argument.");
+        
+        let channel = await this.ensureContext();
+
+         return await channel.transfer(buffer);
+    };
+
+    /**
+     * Gets or creates an context for a given webUrl.
+     */
     static  getContext(opts) {
         if (!opts.webUrl)
             throw "Web Url must be specified.";

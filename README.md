@@ -45,11 +45,13 @@ use SET on windows.
 
 TODO:
 
- -[ ] Add a configure script which modifies ./app/HostWebProxy.config.js
+ -[ ] Add a configure run script which modifies ./app/HostWebProxy.config.js
  -[ ] Support transferrable objects in HostWebProxy for large uploads/downloads
  -[ ] Add an angular http interceptor for any $http requests going to the siteweb
- -[ ] Figure out growth in app.bundle.js
- -[ ] Better debugging experience? (really a bable/webpack thing. maybe document local vars are  off of context_)
+ -[X] Figure out growth in app.bundle.js
+ -[X] Better debugging experience? (really a bable/webpack thing. maybe document local vars are  off of context_)
+ -[ ] Make promises angular promises so that $scope.$apply doesn't need to be run after an await.
+ -[ ] Unit test all the things!
 - [ ] Finish Samples
     - [ ] File Upload
     - [ ] Document Set
