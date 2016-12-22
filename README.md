@@ -60,10 +60,10 @@ TODO:
     - [ ] Pdf Generation/Viewer
     - [ ] Forms Library browser
     - [ ] ...
-- [ ] Deployment Scripts
+ - [ ] Deployment Scripts
     - [ ] Deploy-App-SPO
     - [X] Deploy-Proxy-SPO
-- [ ] On-Prem Support
-  - [ ] Test On-Prem (and document steps!)
-  - [ ] Deploy-App-SP (Requires NTLM Auth Lib)
-  - [ ] Deploy-Proxy-SP (Requires NTLM Auth Lib)
+ - [ ] On-Prem Support
+    - [ ] Test On-Prem (and document steps!)
+    - [ ] Deploy-App-SP (Requires NTLM Auth Lib)
+    - [ ] Deploy-Proxy-SP (Requires NTLM Auth Lib)
