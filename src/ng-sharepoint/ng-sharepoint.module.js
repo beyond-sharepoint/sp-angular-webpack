@@ -3,7 +3,7 @@ import CrossDomainMessageSink from './CrossDomainMessageSink.js'
 import ResourceLoader from './ResourceLoader.js'
 import FormLibrary from './FormLibrary.js'
 import SPContext from './SPContext.js'
-import hostWebProxyConfig from '../../HostWebProxy.config.json'
+import hostWebProxyConfig from '../HostWebProxy.config.json'
 
 const MODULE_NAME = 'ng-sharepoint';
 

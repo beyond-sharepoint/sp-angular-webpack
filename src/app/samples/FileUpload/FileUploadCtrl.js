@@ -27,9 +27,7 @@ class FileUploadCtrl {
     }
 
     canUpload() {
-        if (!this._buffer)
-            return false;
-        return true;
+        return this._buffer && this._documentLibrary.selected
     }
 
     async startUpload() {

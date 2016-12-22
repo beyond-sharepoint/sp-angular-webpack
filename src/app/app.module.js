@@ -1,6 +1,7 @@
 import angular from 'angular'
 import angularUIRouter from 'angular-ui-router'
-import ngSharePoint from './ng-sharepoint/ng-sharepoint.module.js'
+import ngSharePoint from '../ng-sharepoint/ng-sharepoint.module.js'
+import ngSharePointWidgets from '../ng-sharepoint-widgets/ng-sharepoint-widgets.module.js'
 
 //Import App styles, controls, etc.
 import './app.css';
@@ -15,6 +16,7 @@ angular.module(MODULE_NAME, [
    angularUIRouter,
    'angular-loading-bar',
    ngSharePoint,
+   ngSharePointWidgets,
    samples
 ])
     .controller('AppCtrl', [ AppCtrl ])

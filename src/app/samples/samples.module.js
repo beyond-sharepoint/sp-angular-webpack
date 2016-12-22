@@ -11,6 +11,7 @@ const MODULE_NAME = 'samples';
 
 angular.module(MODULE_NAME, [
     'ng-sharepoint',
+    'ng-sharepoint-widgets',
     'ui.bootstrap',
     'ui.router.state',
     'ngFileUpload',

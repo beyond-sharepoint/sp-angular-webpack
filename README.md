@@ -51,7 +51,7 @@ TODO:
  - [X] Figure out growth in app.bundle.js
  - [X] Better debugging experience? (really a bable/webpack thing. maybe document local vars are  off of context_)
  - [ ] Make promises angular promises so that $scope.$apply doesn't need to be run after an await.
- - [ ] Unit test all the things!
+ - [ ] Unit test all the things! (nock them out)
  - [ ] Finish Samples
     - [ ] File Upload
     - [ ] Document Set

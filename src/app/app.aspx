@@ -1,6 +1,6 @@
 <div class="app">
     <nav class="aside-left-nav">
-        <a title class="aside-item logo">
+        <a title class="aside-item logo" href="{{app.url}}">
             <div class="logomark">
                 <img src="/images/logo.png" alt="Beyond SharePoint" title="Beyond SharePoint - Do more with less. Any platform, any device."></img>
             </div>

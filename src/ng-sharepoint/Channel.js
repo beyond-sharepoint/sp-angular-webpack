@@ -139,6 +139,9 @@ class Channel {
                 self.$timeout.cancel(timeoutPromise);
         });
 
+        //While the transferrable specification allows for multiple objects,
+        //IE10 only supports one. So, I'm leaving it at that for now, despite
+        //how obtuse that may seem.
         this._contentWindow.postMessage(buffer, targetOrigin, [buffer]);
         return promise;
     }
