@@ -60,6 +60,7 @@ TODO:
     - [ ] Document Set
     - [ ] Pdf Generation/Viewer
     - [ ] Forms Library browser
+    - [ ] Bulk File Upload
     - [ ] ...
  - [ ] Deployment Scripts
     - [ ] Deploy-App-SPO
