@@ -9,7 +9,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     name: 'host-web-proxy',
-    entry: ['babel-polyfill', './src/HostWebProxy.js'],
+    entry: ['whatwg-fetch', './src/HostWebProxy.js'],
     module: {
         preLoaders: [],
         loaders: [

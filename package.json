@@ -32,13 +32,14 @@
     "bluebird": "^3.4.6",
     "bootstrap": "^3.3.7",
     "font-awesome": "^4.7.0",
-    "jquery": "^3.1.1",
     "lodash": "^4.17.2",
     "moment": "^2.17.1",
     "ng-file-upload": "^12.2.13",
     "ngclipboard": "^1.1.1",
     "office-ui-fabric-core": "^5.1.0",
-    "urijs": "^1.18.4"
+    "promise-polyfill": "^6.0.2",
+    "urijs": "^1.18.4",
+    "whatwg-fetch": "^2.0.1"
   },
   "devDependencies": {
     "@beyond-sharepoint/spo-remote-auth": "^0.1.0",

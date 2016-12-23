@@ -6,6 +6,7 @@ import 'office-ui-fabric-core/dist/css/fabric.css'
 import 'ui-select/dist/select.css'
 
 import 'core-js'
+import 'whatwg-fetch'
 import 'bluebird'
 import 'lodash'
 import 'moment'

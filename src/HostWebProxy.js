@@ -1,77 +1,113 @@
-import jQuery from 'jquery'
-jQuery.noConflict();
+import '../lib/docReady.js'
 import hostWebProxyConfig from './HostWebProxy.config.json'
-
-let _lastTransferredObject = null;
-
-var ajax = function (request) {
-
-	request.success = function (data, textStatus, jqXHR) {
-		_lastTransferredObject = null;
-		postMessage({
-			postMessageId: request.postMessageId,
-			result: "success",
-			data: data,
-			textStatus: textStatus,
-			jqXHR: jqXHR
-		});
-	};
-
-	request.error = function (jqXHR, textStatus, errorThrown) {
-		_lastTransferredObject = null;
-		postMessage({
-			postMessageId: request.postMessageId,
-			result: "error",
-			jqXHR: jqXHR,
-			textStatus: textStatus,
-			errorThrown: errorThrown
-		});
-	};
-
-	if (!!request._useTransferObjectAsBody && _lastTransferredObject) {
-		request.data = _lastTransferredObject;
-		request.processData = false;
-	}
-
-	jQuery.ajax(request);
-};
-
-let postMessage = function (data) {
-	let targetOrigin = hostWebProxyConfig.originUrl;
-	if (!targetOrigin)
-		targetOrigin = "*";
-
-	window.parent.postMessage(JSON.stringify(data), targetOrigin);
-};
 
 //When the document is ready, bind to the 'message' event to recieve messages passed
 //from the parent window via window.postMessage
-jQuery(document).ready(function () {
+docReady(function () {
 
-	jQuery(window).bind("message", function (event) {
-		if (!event.originalEvent.data)
-			return;
-		
-		if (Object.prototype.toString.call(event.originalEvent.data) === "[object ArrayBuffer]") {
-			postMessage({
-					command: "transfer",
-					result: event.originalEvent.data.byteLength
-				});
+	let _lastTransferredObject = null;
 
-			_lastTransferredObject = event.originalEvent.data;
+	/**
+	 * Utility method to post messages back to the parent.
+	 */
+	let postMessage = function (data, request, response) {
+		let targetOrigin = hostWebProxyConfig.originUrl;
+		if (!targetOrigin)
+			targetOrigin = "*";
+
+		//If a response object is specified, get the properties
+		if (response) {
+			for (let propertyKey of ["ok", "redirected", "status", "statusText", "type", "url"]) {
+				data[propertyKey] = response[propertyKey];
+			}
+
+			data.headers = {};
+			for (let key of response.headers.keys()) {
+				let value = response.headers.getAll(key);
+				if (value.length === 1)
+					data.headers[key] = value[0];
+				else
+					data.headers[key] = value;
+			}
+
+			let transformPromise;
+
+			switch (request._responseDataType) {
+				case "arrayBuffer":
+					response.arrayBuffer()
+						.then(function (arrayBuffer) {
+							data.expectArrayBuffer = true;
+							window.parent.postMessage(JSON.stringify(data), targetOrigin);
+
+							//Sending multiple transferrable objects would be beneficial,
+							//but keeping it to one to satisfy IE10.
+							window.parent.postMessage(arrayBuffer, targetOrigin, [arrayBuffer]);
+						});
+					return;
+				case "formData":
+					transformPromise = response.formData()
+					break;
+				case "text":
+					transformPromise = response.text()
+					break;
+				case "json":
+				default:
+					transformPromise = response.json()
+					break;
+			}
+
+			transformPromise.then(function (responseBody) {
+				data.data = responseBody;
+				window.parent.postMessage(JSON.stringify(data), targetOrigin);
+			});
+
 			return;
 		}
 
-		let dataType = jQuery.type(event.originalEvent.data);
+		window.parent.postMessage(JSON.stringify(data), targetOrigin);
+	};
+
+	window.addEventListener("message", function (event) {
+		if (!event.data)
+			return;
+
+		if (Object.prototype.toString.call(event.data) === "[object ArrayBuffer]") {
+			postMessage({
+				command: "transfer",
+				result: event.data.byteLength
+			});
+
+			_lastTransferredObject = event.data;
+			return;
+		}
+
+		let dataType = typeof event.data;
 		if (dataType !== "string") {
 			throw new Error("HostWebProxy: Unexpected data type recieved via PostMessage");
 		}
 
-		let request = JSON.parse(event.originalEvent.data);
+		let request = JSON.parse(event.data);
 
 		switch (request.command) {
 			case "Fetch":
-				ajax(request);
+				if (!!request._useTransferObjectAsBody && _lastTransferredObject) {
+					request.body = _lastTransferredObject;
+				}
+
+				fetch(request.url, request)
+					.then(function (response) {
+						_lastTransferredObject = null;
+						postMessage({
+							postMessageId: request.postMessageId,
+							result: "success"
+						}, request, response);
+					}, function (response) {
+						_lastTransferredObject = null;
+						postMessage({
+							postMessageId: request.postMessageId,
+							result: "error"
+						}, request, response);
+					});
 				break;
 			case "Ping":
 				postMessage(request);
@@ -83,7 +119,7 @@ jQuery(document).ready(function () {
 					result: "error",
 					errorMessage: "Unknown or unsupported command: " + request.command,
 					responseAvailable: false
-				});
+				}, request);
 				break;
 		}
 	});

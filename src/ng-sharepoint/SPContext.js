@@ -23,7 +23,7 @@ class SPContext {
                 "Content-Type": "application/json;odata=verbose"
             }
         });
-        
+
         this.proxyFullPath = (new URI(webUrl)).pathname(this.settings.proxyPath).toString();
         this.contextFullPath = (new URI(webUrl)).pathname(this.settings.contextPath).toString();
     }
@@ -78,7 +78,7 @@ class SPContext {
      */
     async ensureContext() {
         let channel;
-        
+
         //Ensure that a SharePoint channel is open. If it times out, redirect to the SharePoint Authentication page.
         try {
             channel = await this.$crossDomainMessageSink.createChannel(this.proxyFullPath);
@@ -98,7 +98,7 @@ class SPContext {
             authUri.pathname(this.settings.loginUrl);
             authUri.addQuery("source", sourceUrl);
 
-            this.$window.open(authUri.toString(),  "_top");
+            this.$window.open(authUri.toString(), "_top");
 
             //Return a promise that won't resolve while this page is navigating.
             return new Promise(function () { });
@@ -122,7 +122,7 @@ class SPContext {
             if (!contextInfo)
                 throw "A connection to the ContextInfo endpoint succeeded, but a result was not returned.";
 
-            this.contextInfo= contextInfo;
+            this.contextInfo = contextInfo;
             this.contextInfo.expires = moment().add(this.contextInfo.FormDigestTimeoutSeconds, 'seconds');
 
             //Update the web and site Url based on what we received back from contextinfo.
@@ -176,23 +176,23 @@ class SPContext {
     async transfer(buffer) {
         if (!buffer || Object.prototype.toString.call(buffer) !== '[object ArrayBuffer]')
             throw new Error("An ArrayBuffer must be specified as the first argument.");
-        
+
         let channel = await this.ensureContext();
 
-         return await channel.transfer(buffer);
+        return await channel.transfer(buffer);
     };
 
     /**
      * Gets or creates an context for a given webUrl.
      */
-    static  getContext(opts) {
+    static getContext(opts) {
         if (!opts.webUrl)
             throw "Web Url must be specified.";
 
         //Ensure that we have a good weburl.
         let webUri = new URI(opts.webUrl);
         opts.webUrl = webUri.origin();
-        
+
         if (SPContexts[opts.webUrl])
             return SPContexts[opts.webUrl];
 
