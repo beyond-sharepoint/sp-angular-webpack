@@ -197,7 +197,6 @@ class SPContext {
             proxyUrl: config.proxyUrl,
             loginUrl: config.loginUrl
         });
-        console.log(settings);
 
         //Ensure that we have a good weburl.
         let webUrl = URI(settings.webUrl).origin();
