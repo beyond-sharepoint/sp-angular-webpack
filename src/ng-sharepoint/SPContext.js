@@ -7,6 +7,11 @@ const SPContexts = {};
 
 const SPWeb = require("./SPWeb.js");
 
+/**
+ * Represents a SPContext.
+ * 
+ * A SPContext is per-web.
+ */
 class SPContext {
     constructor($window, $crossDomainMessageSink, webUrl, settings) {
         this.$window = $window;
@@ -17,7 +22,7 @@ class SPContext {
             contextPath: "/_api/contextinfo",
             proxyPath: "/Shared%20Documents/HostWebProxy.aspx",
             loginPath: "/_layouts/15/authenticate.aspx",
-            authenticationReturnSettings: null,
+            authenticationReturnSettings: {},
             headers: {
                 "Accept": "application/json;odata=verbose",
                 "Content-Type": "application/json;odata=verbose"
@@ -26,14 +31,6 @@ class SPContext {
 
         this.proxyFullPath = URI(webUrl).pathname(this.settings.proxyPath).toString();
         this.contextFullPath = URI(webUrl).pathname(this.settings.contextPath).toString();
-    }
-
-    get web() {
-        if (!this._web) {
-            this._web = new SPWeb(this, this.webUrl);
-        }
-
-        return this._web;
     }
 
     /**
@@ -74,6 +71,20 @@ class SPContext {
     }
 
     /**
+     * Returns a SPWeb object for the current context.
+     */
+    async getSPWeb() {
+
+        await this.ensureContext();
+
+        if (!this._web) {
+            this._web = new SPWeb(this, this.webUrl);
+        }
+
+        return this._web;
+    }
+
+    /**
      * Ensures that a current context is active.
      */
     async ensureContext() {
@@ -84,7 +95,6 @@ class SPContext {
             channel = await this.$crossDomainMessageSink.createChannel(this.proxyFullPath);
         }
         catch (ex) {
-            debugger
             let sourceUrl;
             if (this.settings.authenticationReturnSettings.source)
                 sourceUrl = new URI(this.settings.authenticationReturnSettings.source);
@@ -187,7 +197,7 @@ class SPContext {
      * Gets or creates a context for a given webUrl.
      */
     static getContext(config, $window, $crossDomainMessageSink, settings) {
-       //Merge some settings with our config.
+        //Merge some settings with our config.
         settings = _.defaultsDeep(settings, {
             authenticationReturnSettings: {
                 source: null,
@@ -199,8 +209,8 @@ class SPContext {
         });
 
         //Ensure that we have a good weburl.
-        let webUrl = URI(settings.webUrl).origin();
-        
+        let webUrl = URI(settings.webUrl).toString();
+
         if (SPContexts[webUrl])
             return SPContexts[webUrl];
 
