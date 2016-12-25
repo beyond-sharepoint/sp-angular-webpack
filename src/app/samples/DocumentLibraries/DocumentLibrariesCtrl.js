@@ -2,14 +2,7 @@ class DocumentLibrariesCtrl {
     constructor($ngSharePointConfig, $SPContext, $scope, $state) {
         this.isLoading = true;
         
-        this._context = $SPContext($ngSharePointConfig.siteUrl, {
-            authenticationReturnSettings: {
-                query: {
-                    target: $ngSharePointConfig.siteUrl,
-                    go: true
-                }
-            }
-        });
+        this._context = $SPContext.getContext();
 
         this.gridOptions = {
             enableSorting: true,

@@ -20,9 +20,6 @@ angular.module(MODULE_NAME, [
     'ui.grid.resizeColumns',
     'ui.grid.moveColumns'
 ])
-    .controller('DocumentLibrariesCtrl', ['$ngSharePointConfig', '$SPContext', '$scope', '$state', DocumentLibrariesCtrl])
-    .controller('FileUploadCtrl', ['$ngSharePointConfig', '$SPContext', '$scope', '$state', FileUploadCtrl])
-     .controller('DocumentSetsCtrl', ['$ngSharePointConfig', '$SPContext', '$scope', '$state', DocumentSetsCtrl])
     .config(['$stateProvider', function ($stateProvider) {
         $stateProvider
             .state('samples', {
@@ -44,7 +41,8 @@ angular.module(MODULE_NAME, [
                     },
                     workspaceMain: {
                         template: require("./DocumentLibraries/workspace.aspx"),
-                        controller: "DocumentLibrariesCtrl as sp"
+                        controller: ['$ngSharePointConfig', '$SPContext', '$scope', '$state', DocumentLibrariesCtrl],
+                        controllerAs: "sp"
                     }
                 }
             })
@@ -56,7 +54,8 @@ angular.module(MODULE_NAME, [
                     },
                     workspaceMain: {
                         template: require("./FileUpload/workspace.aspx"),
-                        controller: "FileUploadCtrl as sp"
+                        controller: ['$SPContext', '$scope', '$state', FileUploadCtrl],
+                        controllerAs: "sp"
                     }
                 }
             })
@@ -68,7 +67,8 @@ angular.module(MODULE_NAME, [
                     },
                     workspaceMain: {
                         template: require("./DocumentSets/workspace.aspx"),
-                        controller: "DocumentSetsCtrl as sp"
+                        controller: ['$ngSharePointConfig', '$SPContext', '$scope', '$state', DocumentSetsCtrl],
+                        controllerAs: "sp"
                     }
                 }
             });

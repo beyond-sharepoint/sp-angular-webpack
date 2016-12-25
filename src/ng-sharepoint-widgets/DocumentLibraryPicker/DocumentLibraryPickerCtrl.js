@@ -5,14 +5,7 @@ class DocumentLibraryPickerCtrl {
       this.documentLibraries = [];
       this.siteUrl = $ngSharePointConfig.siteUrl;
       
-      this._context = $SPContext($ngSharePointConfig.siteUrl, {
-            authenticationReturnSettings: {
-                query: {
-                    target: $ngSharePointConfig.siteUrl,
-                    go: true
-                }
-            }
-        });
+      this._context = $SPContext.getContext();
 
         this.$scope = $scope;
 

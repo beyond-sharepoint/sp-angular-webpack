@@ -1,8 +1,7 @@
 import URI from 'urijs'
 
 class FileUploadCtrl {
-    constructor($ngSharePointConfig, $SPContext, $scope, $state) {
-        this.$ngSharePointConfig = $ngSharePointConfig;
+    constructor($SPContext, $scope, $state) {
         this.$SPContext = $SPContext;
         this.$scope = $scope;
         this.$state = $state;
@@ -42,14 +41,7 @@ class FileUploadCtrl {
     }
 
     async startUpload() {
-        this._context = this.$SPContext(this.$ngSharePointConfig.siteUrl, {
-            authenticationReturnSettings: {
-                query: {
-                    target: this.$ngSharePointConfig.siteUrl,
-                    go: true
-                }
-            }
-        });
+        this._context = this.$SPContext.getContext();
 
         let targetFilename = this._fileName;
         let targetFolderServerRelativeUrl = this._documentLibrary.selected.RootFolder.ServerRelativeUrl;

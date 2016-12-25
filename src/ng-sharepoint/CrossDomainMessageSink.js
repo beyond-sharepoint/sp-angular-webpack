@@ -28,7 +28,7 @@ class CrossDomainMessageSink {
         if (!_.isString(proxyUrl))
             throw "proxyUrl must be specified as the first argument.";
 
-        let proxyUri = new URI(proxyUrl);
+        let proxyUri = URI(proxyUrl);
         let origin = proxyUri.origin();
         if (this.channels[origin])
             return this.channels[origin];

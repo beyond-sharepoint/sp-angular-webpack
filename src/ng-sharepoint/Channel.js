@@ -1,5 +1,7 @@
 /**
  * Represents a channel with which commands can be invoked.
+ * 
+ * Channels are one-per-origin. 
  */
 class Channel {
     constructor(config, $rootScope, $timeout, contentWindow) {

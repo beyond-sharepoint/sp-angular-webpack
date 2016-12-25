@@ -4,6 +4,7 @@ import ResourceLoader from './ResourceLoader.js'
 import FormLibrary from './FormLibrary.js'
 import SPContext from './SPContext.js'
 import hostWebProxyConfig from '../HostWebProxy.config.json'
+import URI from 'urijs';
 
 const MODULE_NAME = 'ng-sharepoint';
 
@@ -24,33 +25,10 @@ angular.module(MODULE_NAME, [
         '$window',
         '$crossDomainMessageSink',
         FormLibrary])
-    .factory('$SPContext', ['$ngSharePointConfig', '$window', '$crossDomainMessageSink',
-        function (config, $window, $crossDomainMessageSink) {
-
-            return function (webUrl, settings) {
-
-                //Merge some settings with our config.
-                _.defaultsDeep(settings, {
-                    authenticationReturnSettings: {
-                        source: null,
-                        query: {}
-                    },
-                    proxyUrl: config.proxyUrl,
-                    loginUrl: config.loginUrl
-                });
-
-                return SPContext.getContext({
-                    $window,
-                    $crossDomainMessageSink,
-                    webUrl,
-                    settings
-                });
-            };
-        }])
-    .provider("$ngSharePointConfig", function () {
+    .provider('$ngSharePointConfig', function () {
         let defaults = {
             siteUrl: hostWebProxyConfig.siteUrl,
-            proxyUrl: hostWebProxyConfig.proxyUrl ? hostWebProxyConfig.proxyUrl : "/_layouts/15/AppWebProxy.aspx",
+            proxyUrl: hostWebProxyConfig.proxyUrl || "/Shared%20Documents/HostWebProxy.aspx",
             loginUrl: "/_layouts/15/authenticate.aspx",
             crossDomainMessageSink: {
                 outgoingMessageName: "$ngSharePointMessageSink-Outgoing",
@@ -66,6 +44,53 @@ angular.module(MODULE_NAME, [
             }
         };
     })
+    .factory('$SPContext', ['$ngSharePointConfig', '$window', '$crossDomainMessageSink',
+        function (config, $window, $crossDomainMessageSink) {
+            return {
+                getContext: function (settings) {
+                    return SPContext.getContext(
+                        config,
+                        $window,
+                        $crossDomainMessageSink,
+                        settings
+                    );
+                }
+            }
+        }])
+    .factory('$ngSharePointInterceptor', ['$ngSharePointConfig', '$rootScope', '$q', function ($ngSharePointConfig, $rootScope, $q) {
+
+        let requestInterceptor = {
+            request: function (config) {
+                if (config) {
+                    config.headers = config.headers || {};
+                    let requestedSiteUrl = URI(config.url).origin();
+                    //If this isn't the site we're looking for, let it pass through.
+                    if ($ngSharePointConfig.siteUrl !== requestedSiteUrl) {
+                        return config;
+                    }
+                }
+            },
+            responseError: function (rejection) {
+                //authService.info('Getting error in the response: ' + JSON.stringify(rejection));
+                if (rejection) {
+                    if (rejection.status === 401) {
+                        //var resource = authService.getResourceForEndpoint(rejection.config.url);
+                        //authService.clearCacheForResource(resource);
+                        $rootScope.$broadcast('adal:notAuthorized', rejection, resource);
+                    }
+                    else {
+                        $rootScope.$broadcast('adal:errorResponse', rejection);
+                    }
+                    return $q.reject(rejection);
+                }
+            }
+        };
+
+        return requestInterceptor;
+    }])
+    .config(['$httpProvider', function ($httpProvider) {
+        $httpProvider.interceptors.push('$ngSharePointInterceptor');
+    }])
     .run([
         '$ngSharePointConfig', '$window', '$rootScope',
         function (ngSharePointConfig, $window, $rootScope) {

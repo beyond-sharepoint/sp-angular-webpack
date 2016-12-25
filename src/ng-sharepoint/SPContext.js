@@ -17,15 +17,15 @@ class SPContext {
             contextPath: "/_api/contextinfo",
             proxyPath: "/Shared%20Documents/HostWebProxy.aspx",
             loginPath: "/_layouts/15/authenticate.aspx",
-            authenticationReturnParams: null,
+            authenticationReturnSettings: null,
             headers: {
                 "Accept": "application/json;odata=verbose",
                 "Content-Type": "application/json;odata=verbose"
             }
         });
 
-        this.proxyFullPath = (new URI(webUrl)).pathname(this.settings.proxyPath).toString();
-        this.contextFullPath = (new URI(webUrl)).pathname(this.settings.contextPath).toString();
+        this.proxyFullPath = URI(webUrl).pathname(this.settings.proxyPath).toString();
+        this.contextFullPath = URI(webUrl).pathname(this.settings.contextPath).toString();
     }
 
     get web() {
@@ -84,6 +84,7 @@ class SPContext {
             channel = await this.$crossDomainMessageSink.createChannel(this.proxyFullPath);
         }
         catch (ex) {
+            debugger
             let sourceUrl;
             if (this.settings.authenticationReturnSettings.source)
                 sourceUrl = new URI(this.settings.authenticationReturnSettings.source);
@@ -183,21 +184,29 @@ class SPContext {
     };
 
     /**
-     * Gets or creates an context for a given webUrl.
+     * Gets or creates a context for a given webUrl.
      */
-    static getContext(opts) {
-        if (!opts.webUrl)
-            throw "Web Url must be specified.";
+    static getContext(config, $window, $crossDomainMessageSink, settings) {
+       //Merge some settings with our config.
+        settings = _.defaultsDeep(settings, {
+            authenticationReturnSettings: {
+                source: null,
+                query: {}
+            },
+            webUrl: config.siteUrl,
+            proxyUrl: config.proxyUrl,
+            loginUrl: config.loginUrl
+        });
+        console.log(settings);
 
         //Ensure that we have a good weburl.
-        let webUri = new URI(opts.webUrl);
-        opts.webUrl = webUri.origin();
+        let webUrl = URI(settings.webUrl).origin();
+        
+        if (SPContexts[webUrl])
+            return SPContexts[webUrl];
 
-        if (SPContexts[opts.webUrl])
-            return SPContexts[opts.webUrl];
-
-        var result = new SPContext(opts.$window, opts.$crossDomainMessageSink, opts.webUrl, opts.settings);
-        SPContexts[opts.webUrl] = result;
+        var result = new SPContext($window, $crossDomainMessageSink, webUrl, settings);
+        SPContexts[webUrl] = result;
         return result;
     }
 }
