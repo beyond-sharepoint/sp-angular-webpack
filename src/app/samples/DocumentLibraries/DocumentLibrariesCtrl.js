@@ -1,8 +1,8 @@
 class DocumentLibrariesCtrl {
-    constructor($ngSharePointConfig, $SPContext, $scope, $state) {
+    constructor($ngSharePointConfig, $http) {
         this.isLoading = true;
-        
-        this._context = $SPContext.getContext();
+        this.$http = $http;
+        this.$ngSharePointConfig = $ngSharePointConfig;
 
         this.gridOptions = {
             enableSorting: true,
@@ -13,20 +13,17 @@ class DocumentLibrariesCtrl {
         };
 
         let that = this;
-        this._context.ensureContext()
-            .then(function() {
-                return that.getDocumentLibraries();
-            })
-            .then(function(data) {
-                that.gridOptions.data = data.results;
+
+        this.getDocumentLibraries()
+            .then(function (response) {
+                that.gridOptions.data = response.data.d.results;
                 that.isLoading = false;
-                $scope.$apply();
             });
     }
 
     async getDocumentLibraries() {
-        return this._context.fetch({
-            url: "/_api/web/Lists?$filter=BaseTemplate eq 101"
+        return this.$http({
+            url: this.$ngSharePointConfig.siteUrl + "/_api/web/Lists?$filter=BaseTemplate eq 101"
         });
     };
 }

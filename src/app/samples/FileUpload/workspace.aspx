@@ -22,17 +22,16 @@
                 <label class="col-sm-3 control-label">File</label>
                 <div class="col-sm-6">
                     <div class="btn btn-primary pull-right" ng-model="file" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="100MB"
-                        ngf-min-height="100" ngf-select="sp.fileSelected($file)" ngf-before-model-change="sp.fileSelecting($file)">Select an image</div>
+                        ngf-min-height="100" ngf-select="sp.fileSelected($file)">Select an image</div>
                     <div class="clearfix"></div>
                     <div class="pull-right">
-                        <div data-ng-if="!sp.isProcessingImage && sp._buffer">
-                            <div><i>{{sp._fileName}}</i></div>
-                            <div class="pull-right"><i>({{sp._fileSize | number}}&nbsp;bytes)</i></div>
+                        <div data-ng-if="sp.selectedFile">
+                            <div><i>{{sp.selectedFile.name}}</i></div>
+                            <div class="pull-right"><i>({{sp.selectedFile.size | number}}&nbsp;bytes)</i></div>
                         </div>
-                        <div data-ng-if="!sp.isProcessingImage && !sp._buffer">
+                        <div data-ng-if="!sp.selectedFile">
                             <i>No File Selected</i>
                         </div>
-                        <span data-ng-if="sp.isProcessingImage"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span class="sr-only">Loading...</span></span>
                     </div>
                 </div>
             </div>

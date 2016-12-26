@@ -49,10 +49,11 @@ TODO:
  - [X] Support transferable objects in HostWebProxy for large uploads
  - [X] Support large downloads too
  - [X] Replace jQuery.ajax with fetch api+polyfill in HostWebProxy
- - [ ] Add an angular http interceptor for any plain-jane $http requests going to the siteweb
+ - [X] Add an angular http interceptor for any plain-jane $http requests going to the siteweb
  - [X] Figure out growth in app.bundle.js
  - [X] Better debugging experience? (really a bable/webpack thing. maybe document local vars are  off of context_)
- - [ ] Make promises angular promises so that $scope.$apply doesn't need to be run after an await.
+ - [X] Make promises angular promises so that $scope.$apply doesn't need to be run after an await.
+ - [ ] Add the ability to add an array of known webs to configuration which will be auto-intercepted via httpinterceptor.
  - [ ] Unit test all the things! (nock them out)
  - [ ] Finish Samples
     - [X] File Upload

@@ -1,29 +1,22 @@
 class DocumentLibraryPickerCtrl {
-  constructor($ngSharePointConfig, $SPContext, $scope) {
-      this.isLoading = false;
-      this.documentLibrary = {};
-      this.documentLibraries = [];
-      this.siteUrl = $ngSharePointConfig.siteUrl;
-      
-      this._context = $SPContext.getContext();
-
-        this.$scope = $scope;
+    constructor($ngSharePointConfig, $http) {
+        this.isLoading = false;
+        this.documentLibrary = {};
+        this.documentLibraries = [];
+        this.$http = $http;
+        this.siteUrl = $ngSharePointConfig.siteUrl;
 
         let that = this;
-        this._context.ensureContext()
-            .then(function() {
-                return that.getDocumentLibraries();
-            })
-            .then(function(data) {
-                that.documentLibraries = data.results;
+        this.getDocumentLibraries()
+            .then(function (response) {
+                that.documentLibraries = response.data.d.results;
                 that.isLoading = false;
-                $scope.$apply();
             });
-  }
+    }
 
-  async getDocumentLibraries() {
-        return this._context.fetch({
-            url: "/_api/web/Lists?$filter=BaseTemplate eq 101&$expand=RootFolder"
+    async getDocumentLibraries() {
+        return this.$http({
+            url: this.siteUrl + "/_api/web/Lists?$filter=BaseTemplate eq 101&$expand=RootFolder"
         });
     };
 }

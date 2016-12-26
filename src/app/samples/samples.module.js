@@ -41,7 +41,7 @@ angular.module(MODULE_NAME, [
                     },
                     workspaceMain: {
                         template: require("./DocumentLibraries/workspace.aspx"),
-                        controller: ['$ngSharePointConfig', '$SPContext', '$scope', '$state', DocumentLibrariesCtrl],
+                        controller: ['$ngSharePointConfig', '$http', DocumentLibrariesCtrl],
                         controllerAs: "sp"
                     }
                 }
@@ -54,7 +54,7 @@ angular.module(MODULE_NAME, [
                     },
                     workspaceMain: {
                         template: require("./FileUpload/workspace.aspx"),
-                        controller: ['$SPContext', '$scope', '$state', FileUploadCtrl],
+                        controller: ['$ngSharePointConfig', '$http', FileUploadCtrl],
                         controllerAs: "sp"
                     }
                 }

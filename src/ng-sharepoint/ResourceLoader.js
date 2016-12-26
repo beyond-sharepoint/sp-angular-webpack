@@ -63,8 +63,8 @@ class ResourceLoader {
             iframe.height = 0;
             iframe.width = 0;
             iframe.tabindex = -1;
-            iframe.style="display: none;";
-            
+            iframe.style = "display: none;";
+
             if (sandbox)
                 iframe.sandbox = sandbox;
 

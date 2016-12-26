@@ -1,7 +1,7 @@
 /**
  * Represents a channel with which commands can be invoked.
  * 
- * Channels are one-per-origin. 
+ * Channels are one-per-origin (protocol/domain/port).
  */
 class Channel {
     constructor(config, $rootScope, $timeout, contentWindow) {
@@ -68,7 +68,7 @@ class Channel {
         let timeoutPromise;
         if (timeout > 0) {
             timeoutPromise = this.$timeout(function () {
-                reject(`invoke() timed out while waiting for a response while executing ${data.command}`);
+                reject(new Error(`invoke() timed out while waiting for a response while executing ${data.command}`));
             }, timeout);
         }
 

@@ -1,69 +1,44 @@
 import URI from 'urijs'
 
 class FileUploadCtrl {
-    constructor($SPContext, $scope, $state) {
-        this.$SPContext = $SPContext;
-        this.$scope = $scope;
-        this.$state = $state;
+    constructor($ngSharePointConfig, $http) {
+        this.$http = $http;
+        this.$ngSharePointConfig = $ngSharePointConfig;
 
-        this.isProcessingImage = false;
         this.isUploading = false;
-    }
-
-    fileSelecting() {
-        this.isProcessingImage = true;
     }
 
     fileSelected(file) {
         if (!file) {
-            this._buffer = undefined;
-            this.isProcessingImage = false;
+            this.selectedFile = undefined;
             return;
         }
-
-        //Convert the Blob to an arraybuffer.
-        let self = this;
-        let reader = new FileReader();
-        reader.addEventListener("loadend", function () {
-            self._buffer = reader.result;
-            self.isProcessingImage = false;
-            self.$scope.$apply();
-        });
-
-        //Note: If the file is resized using ngf-resize, the filename property is $ngfName
-        this._fileName = file.name;
-        this._fileSize = file.size
-        reader.readAsArrayBuffer(file);
+        this.selectedFile = file;
     }
 
     canUpload() {
-        return this._buffer && this._documentLibrary && this._documentLibrary.selected
+        return this.selectedFile && this._documentLibrary && this._documentLibrary.selected
     }
 
     async startUpload() {
-        this._context = this.$SPContext.getContext();
 
-        let targetFilename = this._fileName;
+        //Note: If the file is resized using ngf-resize, the filename property is $ngfName
+        let targetFilename = this.selectedFile.name;
         let targetFolderServerRelativeUrl = this._documentLibrary.selected.RootFolder.ServerRelativeUrl;
         let overwrite = true;
 
         this.isUploading = true;
 
-        //Transfer the ArrayBuffer to the iFrame context.
-        await this._context.transfer(this._buffer);
-
-        //upload to SharePoint using the ArrayBuffer.
-        let result = await this._context.fetch({
-            _useTransferObjectAsBody: true,
+        await this.$http({
             method: "POST",
-            url: URI.joinPaths(`/_api/web/getfolderbyserverrelativeurl('${URI.encode(targetFolderServerRelativeUrl)}')/files/add(overwrite=${overwrite},url='${URI.encode(targetFilename)}')`).href()
+            url: this.$ngSharePointConfig.siteUrl + URI.joinPaths(`/_api/web/getfolderbyserverrelativeurl('${URI.encode(targetFolderServerRelativeUrl)}')/files/add(overwrite=${overwrite},url='${URI.encode(targetFilename)}')`).href(),
+            body: this.selectedFile
         });
 
         //We could probably do something with the result...
 
-        this._buffer = undefined;
+        this.selectedFile = undefined;
         this.isUploading = false;
-        this.$scope.$apply();
     }
 }
 

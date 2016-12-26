@@ -95,24 +95,31 @@ class SPContext {
             channel = await this.$crossDomainMessageSink.createChannel(this.proxyFullPath);
         }
         catch (ex) {
-            let sourceUrl;
-            if (this.settings.authenticationReturnSettings.source)
-                sourceUrl = new URI(this.settings.authenticationReturnSettings.source);
-            else
-                sourceUrl = new URI(this.$window.location.href);
+            //If it's a timeout error, redirect to the login page.
+            if (_.isError(ex) && ex.message.startsWith("invoke() timed out")) {
+                let sourceUrl;
+                if (this.settings.authenticationReturnSettings.source)
+                    sourceUrl = new URI(this.settings.authenticationReturnSettings.source);
+                else
+                    sourceUrl = new URI(this.$window.location.href);
 
-            if (this.settings.authenticationReturnSettings.query) {
-                sourceUrl.query(this.settings.authenticationReturnSettings.query);
-            };
+                if (this.settings.authenticationReturnSettings.query) {
+                    sourceUrl.query(this.settings.authenticationReturnSettings.query);
+                };
 
-            let authUri = new URI(this.webUrl);
-            authUri.pathname(this.settings.loginUrl);
-            authUri.addQuery("source", sourceUrl);
+                let authUri = URI(this.webUrl)
+                    .pathname(this.settings.loginUrl)
+                    .addQuery("source", sourceUrl)
+                    .toString();
 
-            this.$window.open(authUri.toString(), "_top");
+                this.$window.open(authUri, "_top");
 
-            //Return a promise that won't resolve while this page is navigating.
-            return new Promise(function () { });
+                //Return a promise that won't resolve while this page is navigating.
+                return new Promise(function () { });
+            }
+
+            //Unknown error -- throw the exception.
+            throw ex;
         }
 
         //If we don't have a context, or it is expired, get a new one.
@@ -172,12 +179,7 @@ class SPContext {
             cache: false
         }, settings);
 
-        let response = await channel.invoke('Fetch', mergedSettings);
-
-        if (rawResponse || !response.data)
-            return response;
-
-        return response.data.d;
+        return channel.invoke('Fetch', mergedSettings);
     };
 
     /**

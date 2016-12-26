@@ -34,7 +34,9 @@ angular.module(MODULE_NAME, [
                 outgoingMessageName: "$ngSharePointMessageSink-Outgoing",
                 incomingMessageName: "$ngSharePointMessageSink-Incoming",
                 createChannelTimeout: 5000
-            }
+            },
+            notAuthorizedMessageName: "$ngSharePointNotAuthorized",
+            errorResponseMessageName: "$ngSharePointErrorResponse"
         };
 
         return {
@@ -45,11 +47,11 @@ angular.module(MODULE_NAME, [
         };
     })
     .factory('$SPContext', ['$ngSharePointConfig', '$window', '$crossDomainMessageSink',
-        function (config, $window, $crossDomainMessageSink) {
+        function ($ngSharePointConfig, $window, $crossDomainMessageSink) {
             return {
                 getContext: function (settings) {
                     return SPContext.getContext(
-                        config,
+                        $ngSharePointConfig,
                         $window,
                         $crossDomainMessageSink,
                         settings
@@ -57,59 +59,122 @@ angular.module(MODULE_NAME, [
                 }
             }
         }])
-    .factory('$ngSharePointInterceptor', ['$ngSharePointConfig', '$rootScope', '$q', function ($ngSharePointConfig, $rootScope, $q) {
+    .factory('$ngSharePointInterceptor', [
+        '$ngSharePointConfig',
+        '$window',
+        '$crossDomainMessageSink',
+        '$rootScope',
+        '$q',
+        function ($ngSharePointConfig, $window, $crossDomainMessageSink, $rootScope, $q) {
 
-        let requestInterceptor = {
-            request: function (config) {
-                if (config) {
+            let requestInterceptor = {
+                request: function (config) {
+                    if (!config)
+                        return;
+
+
                     config.headers = config.headers || {};
                     let requestedSiteUrl = URI(config.url).origin();
-                    //If this isn't the site we're looking for, let it pass through.
+
+                    //If this isn't the site we're looking for, let it move along.
                     if ($ngSharePointConfig.siteUrl !== requestedSiteUrl) {
                         return config;
                     }
-                }
-            },
-            responseError: function (rejection) {
-                //authService.info('Getting error in the response: ' + JSON.stringify(rejection));
-                if (rejection) {
-                    if (rejection.status === 401) {
-                        //var resource = authService.getResourceForEndpoint(rejection.config.url);
-                        //authService.clearCacheForResource(resource);
-                        $rootScope.$broadcast('adal:notAuthorized', rejection, resource);
-                    }
-                    else {
-                        $rootScope.$broadcast('adal:errorResponse', rejection);
-                    }
-                    return $q.reject(rejection);
-                }
-            }
-        };
 
-        return requestInterceptor;
-    }])
+                    config.__isNgSharePointIntercepted = true;
+
+                    let context = SPContext.getContext(
+                        $ngSharePointConfig,
+                        $window,
+                        $crossDomainMessageSink,
+                        { webUrl: URI(config.url).origin() }
+                    );
+
+                    //Change the Accept header to one that returns a JSON response, rather than the odata default.
+                    config.headers.Accept = "application/json;odata=verbose";
+
+                    let delayedRequest = $q.defer();
+
+                    let preFetchTasks = [];
+                    if (config.body) {
+                        let bodyType = Object.prototype.toString.call(config.body);
+
+                        switch (bodyType) {
+                            case '[object ArrayBuffer]':
+                                preFetchTasks.push(context.transfer(config.body));
+                                config._useTransferObjectAsBody = true;
+                                break;
+                            case '[object File]':
+                                let convertBlobtoArrayBuffer = new Promise((resolve, reject) => {
+                                    let reader = new FileReader();
+                                    reader.addEventListener("loadend", function () {
+                                        let arrayBuffer = reader.result;
+                                        preFetchTasks.push(context.transfer(arrayBuffer));
+                                        config._useTransferObjectAsBody = true;
+                                        resolve();
+                                    });
+                                    reader.readAsArrayBuffer(config.body);
+                                });
+                                preFetchTasks.push(convertBlobtoArrayBuffer);
+                                break;
+                            default:
+                                //Do Nothing.
+                                break;
+                        }
+                    }
+
+                    Promise.all(preFetchTasks)
+                        .then(() => context.fetch(config))
+                        .then(function (response) {
+                            config.response = response;
+                            //Short-circuit the original http request
+                            config.method = "GET";
+                            config.cache = {
+                                get: function () {
+                                    return null;
+                                }
+                            };
+                            delayedRequest.resolve(config);
+                        }, function (errDesc, error) {
+                            config.data = errDesc + "|" + error;
+                            delayedRequest.reject(config);
+                        });
+
+                    return delayedRequest.promise;
+                },
+                response: function (response) {
+                    if (!response.config.__isNgSharePointIntercepted)
+                        return response;
+
+                    let finalResponse = {};
+                    for (let propertyKey of ["headers", "data", "ok", "result", "status", "statusText", "type", "url"]) {
+                        finalResponse[propertyKey] = response.config.response[propertyKey];
+                    }
+                    finalResponse.config = response.config;
+
+                    //If we have an 'error' status, reject the promise.
+                    if (finalResponse.status > 399 && finalResponse.status < 600) {
+                        if (finalResponse.status === 401 || finalResponse.status === 403) {
+                            $rootScope.$broadcast($ngSharePointConfig.notAuthorizedMessageName, finalResponse);
+                        }
+                        else {
+                            $rootScope.$broadcast($ngSharePointConfig.errorResponseMessageName, finalResponse);
+                        }
+                        return $q.reject(finalResponse);
+                    }
+
+                    return $q.resolve(finalResponse);
+                }
+            };
+
+            return requestInterceptor;
+        }])
     .config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push('$ngSharePointInterceptor');
     }])
     .run([
         '$ngSharePointConfig', '$window', '$rootScope',
         function (ngSharePointConfig, $window, $rootScope) {
-
-            /**
-             * Listen for angular broadcast messages that indicate that a message should be sent to the target iFrame.
-             * */
-            $rootScope.$on(ngSharePointConfig.crossDomainMessageSink.outgoingMessageName, function (event, message, targetOrigin) {
-                if (!targetOrigin) {
-                    targetOrigin = hostWebProxyConfig.siteUrl;
-                }
-
-                if (!targetOrigin) {
-                    targetOrigin = "*";
-                }
-
-                let sender = $rootScope.sender || $window.parent;
-                return sender.postMessage(message, targetOrigin);
-            });
 
             /**
              * Listen to messages coming from other windows performing a postMessages and rebroadcast as angular messages.

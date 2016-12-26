@@ -11,7 +11,7 @@ angular.module(MODULE_NAME, [
     //Document Library Picker
     .component('ngspDocumentLibraryPicker', {
         template: require('./DocumentLibraryPicker/DocumentLibraryPicker.aspx'),
-        controller: ['$ngSharePointConfig', '$SPContext', '$scope', DocumentLibraryPickerCtrl],
+        controller: ['$ngSharePointConfig', '$http', DocumentLibraryPickerCtrl],
         controllerAs: 'ctrl',
         bindings: {
             documentLibrary: '='
