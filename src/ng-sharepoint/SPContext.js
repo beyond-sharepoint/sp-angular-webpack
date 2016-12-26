@@ -10,13 +10,13 @@ const SPWeb = require("./SPWeb.js");
 /**
  * Represents a SPContext.
  * 
- * A SPContext is per-web.
+ * A SPContext is per-site-collection.
  */
 class SPContext {
-    constructor($window, $crossDomainMessageSink, webUrl, settings) {
+    constructor($window, $crossDomainMessageSink, siteUrl, settings) {
         this.$window = $window;
         this.$crossDomainMessageSink = $crossDomainMessageSink;
-        this.webUrl = webUrl;
+        this.siteUrl = siteUrl;
         this.settings = _.defaultsDeep(settings, {
             apiRootPath: "/_api/",
             contextPath: "/_api/contextinfo",
@@ -29,8 +29,8 @@ class SPContext {
             }
         });
 
-        this.proxyFullPath = URI(webUrl).pathname(this.settings.proxyPath).toString();
-        this.contextFullPath = URI(webUrl).pathname(this.settings.contextPath).toString();
+        this.proxyFullPath = URI(siteUrl).pathname(this.settings.proxyPath).normalize().toString();
+        this.contextFullPath = URI(siteUrl).pathname(this.settings.contextPath).normalize().toString();
     }
 
     /**
@@ -63,11 +63,13 @@ class SPContext {
 
         await this.ensureContext();
 
-        let targetUri = new URI(siteRelativeUrl);
+        let targetUri = URI(siteRelativeUrl);
         if (targetUri.is("absolute"))
             targetUri = targetUri.relativeTo(this.siteUrl);
 
-        return targetUri.toString();
+        return targetUri
+            .normalize()
+            .toString();
     }
 
     /**
@@ -99,17 +101,18 @@ class SPContext {
             if (_.isError(ex) && ex.message.startsWith("invoke() timed out")) {
                 let sourceUrl;
                 if (this.settings.authenticationReturnSettings.source)
-                    sourceUrl = new URI(this.settings.authenticationReturnSettings.source);
+                    sourceUrl = URI(this.settings.authenticationReturnSettings.source);
                 else
-                    sourceUrl = new URI(this.$window.location.href);
+                    sourceUrl = URI(this.$window.location.href);
 
                 if (this.settings.authenticationReturnSettings.query) {
                     sourceUrl.query(this.settings.authenticationReturnSettings.query);
                 };
 
-                let authUri = URI(this.webUrl)
+                let authUri = URI(this.siteUrl)
                     .pathname(this.settings.loginUrl)
                     .addQuery("source", sourceUrl)
+                    .normalize()
                     .toString();
 
                 this.$window.open(authUri, "_top");
@@ -138,7 +141,7 @@ class SPContext {
             let contextInfo = _.get(context, "data.d.GetContextWebInformation");
 
             if (!contextInfo)
-                throw "A connection to the ContextInfo endpoint succeeded, but a result was not returned.";
+                throw new Error("A connection to the ContextInfo endpoint succeeded, but a result was not returned.");
 
             this.contextInfo = contextInfo;
             this.contextInfo.expires = moment().add(this.contextInfo.FormDigestTimeoutSeconds, 'seconds');
@@ -166,7 +169,7 @@ class SPContext {
             let targetUri = new URI(settings.url);
             if (targetUri.is("relative")) {
                 targetUri = targetUri.absoluteTo(this.webUrl);
-                settings.url = targetUri.toString();
+                settings.url = targetUri.normalize().toString();
             }
         }
 
@@ -196,7 +199,7 @@ class SPContext {
     };
 
     /**
-     * Gets or creates a context for a given webUrl.
+     * Gets or creates a context for a given siteUrl.
      */
     static getContext(config, $window, $crossDomainMessageSink, settings) {
         //Merge some settings with our config.
@@ -205,19 +208,21 @@ class SPContext {
                 source: null,
                 query: {}
             },
-            webUrl: config.siteUrl,
+            siteUrl: config.siteUrl,
             proxyUrl: config.proxyUrl,
             loginUrl: config.loginUrl
         });
 
-        //Ensure that we have a good weburl.
-        let webUrl = URI(settings.webUrl).toString();
+        //Ensure that we have a good siteUrl.
+        let siteUrl = URI(settings.siteUrl)
+            .normalize()
+            .toString();
 
-        if (SPContexts[webUrl])
-            return SPContexts[webUrl];
+        if (SPContexts[siteUrl])
+            return SPContexts[siteUrl];
 
-        var result = new SPContext($window, $crossDomainMessageSink, webUrl, settings);
-        SPContexts[webUrl] = result;
+        var result = new SPContext($window, $crossDomainMessageSink, siteUrl, settings);
+        SPContexts[siteUrl] = result;
         return result;
     }
 }

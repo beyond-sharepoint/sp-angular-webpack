@@ -4,6 +4,7 @@ class FileUploadCtrl {
     constructor($ngSharePointConfig, $http) {
         this.$http = $http;
         this.$ngSharePointConfig = $ngSharePointConfig;
+        this.siteUrl = $ngSharePointConfig.siteUrl;
 
         this.isUploading = false;
     }

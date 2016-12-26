@@ -36,7 +36,8 @@ angular.module(MODULE_NAME, [
                 createChannelTimeout: 5000
             },
             notAuthorizedMessageName: "$ngSharePointNotAuthorized",
-            errorResponseMessageName: "$ngSharePointErrorResponse"
+            errorResponseMessageName: "$ngSharePointErrorResponse",
+            knownSiteCollections: hostWebProxyConfig.knownSiteCollections || []
         };
 
         return {
@@ -74,20 +75,37 @@ angular.module(MODULE_NAME, [
 
 
                     config.headers = config.headers || {};
-                    let requestedSiteUrl = URI(config.url).origin();
+                    let requestedSiteUrl = URI(config.url).normalize().origin();
 
                     //If this isn't the site we're looking for, let it move along.
                     if ($ngSharePointConfig.siteUrl !== requestedSiteUrl) {
                         return config;
                     }
 
+                    //Start at the site collection url.
+                    let siteCollectionUrl = requestedSiteUrl;
+
+                    //Iterate through knownSiteCollections, if the http request's url matches, make that the target siteCollection.
+                    let knownSiteCollections = $ngSharePointConfig.knownSiteCollections || [];
+                    for (let knownSiteCollection of knownSiteCollections) {
+
+                        let fullSiteUrl = URI(knownSiteCollection)
+                            .absoluteTo(requestedSiteUrl)
+                            .normalize()
+                            .toString() + "/";
+
+                        if (URI.commonPath(config.url, fullSiteUrl) === fullSiteUrl)
+                            siteCollectionUrl = fullSiteUrl;
+                    }
+
+                    //Indicate that we've intercepted this http request.
                     config.__isNgSharePointIntercepted = true;
 
                     let context = SPContext.getContext(
                         $ngSharePointConfig,
                         $window,
                         $crossDomainMessageSink,
-                        { webUrl: URI(config.url).origin() }
+                        { siteUrl: siteCollectionUrl }
                     );
 
                     //Change the Accept header to one that returns a JSON response, rather than the odata default.

@@ -53,15 +53,16 @@ TODO:
  - [X] Figure out growth in app.bundle.js
  - [X] Better debugging experience? (really a bable/webpack thing. maybe document local vars are  off of context_)
  - [X] Make promises angular promises so that $scope.$apply doesn't need to be run after an await.
- - [ ] Add the ability to add an array of known webs to configuration which will be auto-intercepted via httpinterceptor.
+ - [X] Add the ability to add an array of known site collections to configuration which will be auto-intercepted via httpinterceptor.
  - [ ] Unit test all the things! (nock them out)
  - [ ] Finish Samples
     - [X] File Upload
-    - [ ] File Download with transferrables
+    - [ ] File Download with transferrables (Gallery)
     - [ ] Document Set
     - [ ] Pdf Generation/Viewer
     - [ ] Forms Library browser
-    - [ ] Bulk File Upload
+    - [ ] Bulk File Upload (from Zip)
+    - [ ] Cross-site collection copy
     - [ ] ...
  - [ ] Deployment Scripts
     - [ ] Deploy-App-SPO

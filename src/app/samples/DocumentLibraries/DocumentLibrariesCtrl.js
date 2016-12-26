@@ -11,14 +11,12 @@ class DocumentLibrariesCtrl {
                 { name: 'Description', enableSorting: false, maxWidth: 9000 }
             ],
         };
+    }
 
-        let that = this;
-
-        this.getDocumentLibraries()
-            .then(function (response) {
-                that.gridOptions.data = response.data.d.results;
-                that.isLoading = false;
-            });
+    async $onInit() {
+        let response = await this.getDocumentLibraries();
+        this.gridOptions.data = response.data.d.results;
+        this.isLoading = false;
     }
 
     async getDocumentLibraries() {

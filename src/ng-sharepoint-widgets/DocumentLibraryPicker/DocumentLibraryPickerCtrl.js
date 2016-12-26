@@ -1,17 +1,13 @@
 class DocumentLibraryPickerCtrl {
-    constructor($ngSharePointConfig, $http) {
-        this.isLoading = false;
+    constructor($http) {
         this.documentLibrary = {};
         this.documentLibraries = [];
         this.$http = $http;
-        this.siteUrl = $ngSharePointConfig.siteUrl;
+    }
 
-        let that = this;
-        this.getDocumentLibraries()
-            .then(function (response) {
-                that.documentLibraries = response.data.d.results;
-                that.isLoading = false;
-            });
+    async $onInit() {
+        let response = await this.getDocumentLibraries();
+        this.documentLibraries = response.data.d.results;
     }
 
     async getDocumentLibraries() {
