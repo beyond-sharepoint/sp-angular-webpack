@@ -9,7 +9,7 @@
         <ui-select-choices repeat="item in ctrl.documentLibraries | filter: $select.search">
             <div>
                 <img ng-src="{{ctrl.siteUrl + item.ImageUrl}}"/>
-                <span style="padding-left: 5px;">{{item.Title | highlight: $select.search}}&nbsp;<small>({{item.RootFolder.ServerRelativeUrl}})</small></span>
+                <span style="padding-left: 5px;" ng-bind-html="item.Title | highlight: $select.search"></span>&nbsp;<small>({{item.RootFolder.ServerRelativeUrl}})</small>
             </div>
             <small>
                 <span data-ng-if="item.Description" ng-bind="item.Description"></span>
