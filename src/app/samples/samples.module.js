@@ -1,77 +1,48 @@
 import angular from 'angular'
+import _ from 'lodash'
 
 import './samples.css'
+import SamplesCtrl from './SamplesCtrl'
 
-//Import samples
-import DocumentLibrariesCtrl from './DocumentLibraries/DocumentLibrariesCtrl.js'
-import FileUploadCtrl from './FileUpload/FileUploadCtrl.js'
-import DocumentSetsCtrl from './DocumentSets/DocumentSetsCtrl.js'
+//dynamically load all samples.
+function requireAll(requireContext) {
+    return requireContext.keys().map(requireContext);
+}
+const modules = requireAll(require.context("./", true, /^\.\/.*?\/.*?\.module\.js$/i));
 
-const MODULE_NAME = 'samples';
-
-angular.module(MODULE_NAME, [
+const moduleNames = [
     'ng-sharepoint',
     'ng-sharepoint-widgets',
     'ui.bootstrap',
     'ui.router.state',
-    'ngFileUpload',
-    'ui.grid',
-    'ui.grid.autoResize',
-    'ui.grid.resizeColumns',
-    'ui.grid.moveColumns'
-])
+];
+
+const sampleDefinitions = [];
+
+for (module of _.orderBy(modules, ['definition.sequence', 'definition.name'])) {
+    moduleNames.push(module.moduleName);
+    sampleDefinitions.push(module.definition);
+}
+
+const MODULE_NAME = 'samples';
+
+angular.module(MODULE_NAME, moduleNames)
+    .constant('$sampleDefinitions', sampleDefinitions)
     .config(['$stateProvider', function ($stateProvider) {
         $stateProvider
             .state('samples', {
                 url: "/samples?target&go",
                 views: {
                     workspaceHeader: {
-                        template: require("./samples-header.aspx")
+                        template: require("./header.aspx")
                     },
                     workspaceMain: {
-                        template: require("./samples-workspace.aspx")
+                        template: require("./workspace.aspx"),
+                        controller: ['$sampleDefinitions', SamplesCtrl],
+                        controllerAs: "ctrl"
                     }
                 }
             })
-            .state('samples-document-libraries', {
-                url: "/samples/document-libraries",
-                views: {
-                    workspaceHeader: {
-                        template: require("./DocumentLibraries/header.aspx")
-                    },
-                    workspaceMain: {
-                        template: require("./DocumentLibraries/workspace.aspx"),
-                        controller: ['$ngSharePointConfig', '$http', DocumentLibrariesCtrl],
-                        controllerAs: "sp"
-                    }
-                }
-            })
-            .state('samples-file-upload', {
-                url: "/samples/file-upload",
-                views: {
-                    workspaceHeader: {
-                        template: require("./FileUpload/header.aspx")
-                    },
-                    workspaceMain: {
-                        template: require("./FileUpload/workspace.aspx"),
-                        controller: ['$ngSharePointConfig', '$http', FileUploadCtrl],
-                        controllerAs: "sp"
-                    }
-                }
-            })
-            .state('samples-document-sets', {
-                url: "/samples/document-sets",
-                views: {
-                    workspaceHeader: {
-                        template: require("./DocumentSets/header.aspx")
-                    },
-                    workspaceMain: {
-                        template: require("./DocumentSets/workspace.aspx"),
-                        controller: ['$ngSharePointConfig', '$SPContext', '$scope', '$state', DocumentSetsCtrl],
-                        controllerAs: "sp"
-                    }
-                }
-            });
     }]);
 
 export default MODULE_NAME

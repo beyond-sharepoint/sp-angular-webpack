@@ -16,7 +16,6 @@ angular.module(MODULE_NAME, [
    angularUIRouter,
    'angular-loading-bar',
    ngSharePoint,
-   ngSharePointWidgets,
    samples
 ])
     .controller('AppCtrl', [ AppCtrl ])
