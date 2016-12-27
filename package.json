@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A starter for SharePoint and Angular made with Webpack",
   "scripts": {
-    "build": "rimraf dist && webpack -p --bail --progress --colors --profile",
+    "build": "rimraf dist && webpack -p --bail --progress --colors --profile --config webpack-app-prod.config.js",
     "build-proxy": "rimraf dist && webpack --bail --progress --profile --config webpack-hostwebproxy.config.js",
     "deploy-proxy-spo": "npm run build-proxy && node ./bin/deploy-proxy-spo.js",
     "server": "webpack-dashboard -- webpack-dev-server --history-api-fallback --inline --progress",

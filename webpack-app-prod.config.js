@@ -35,24 +35,26 @@ module.exports = {
             { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader') },
             { test: /\.json$/, loader: "json-loader" },
             { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=200000&mimetype=application/font-woff&name=[hash].[ext]" },
-            { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader?&name=/fonts/[hash].[ext]" },
+            { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader?name=fonts/[hash].[ext]" },
             { test: /\.(png|jpe?g|gif|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' },
             { test: /\.(html|aspx)$/, loader: 'raw-loader' }
         ]
     },
     output: {
         path: path.join(__dirname, '/dist'),
-        publicPath: '/',
-        filename: '/scripts/[name].[hash].js',
-        chunkFilename: '/scripts/[name].[hash].js'
+        assetsPublicPath: '',
+        publicPath: '',
+        filename: 'scripts/[name].[hash].js',
+        chunkFilename: 'scripts/[name].[hash].js'
     },
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.aspx',
-            inject: 'body'
+            inject: 'body',
+            filename: 'index.aspx'
         }),
-        new webpack.optimize.CommonsChunkPlugin("vendor", "/scripts/vendor.bundle.js"),
-        new ExtractTextPlugin('/styles/[name].[hash].css'),
+        new webpack.optimize.CommonsChunkPlugin("vendor", "scripts/vendor.bundle.js"),
+        new ExtractTextPlugin('styles/[name].[hash].css'),
         new webpack.NoErrorsPlugin(),
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}}),

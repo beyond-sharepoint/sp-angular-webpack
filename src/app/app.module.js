@@ -29,7 +29,7 @@ angular.module(MODULE_NAME, [
 
             $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|feed|webcal|excel):/);
             $urlRouterProvider.otherwise('/samples');
-            $locationProvider.html5Mode(true);
+            //$locationProvider.html5Mode(true);
 
             //Some things that improve perf.
             $compileProvider.debugInfoEnabled(false);

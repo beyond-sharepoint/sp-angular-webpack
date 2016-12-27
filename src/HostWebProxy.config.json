@@ -1,6 +1,6 @@
 {
     "siteUrl": "https://baristalabs.sharepoint.com",
     "proxyUrl": "/Shared%20Documents/HostWebProxy.aspx",
-    "originUrl": "http://localhost:8080",
+    "trustedOriginAuthorities": [".*"],
     "knownSiteCollections": []
 }

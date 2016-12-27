@@ -11,9 +11,7 @@ docReady(function () {
 	 * Utility method to post messages back to the parent.
 	 */
 	let postMessage = function (data, request, response) {
-		let targetOrigin = hostWebProxyConfig.originUrl;
-		if (!targetOrigin)
-			targetOrigin = "*";
+		let responseOrigin = hostWebProxyConfig.responseOrigin || "*";
 
 		//If a response object is specified, get the properties
 		if (response) {
@@ -37,11 +35,11 @@ docReady(function () {
 					response.arrayBuffer()
 						.then(function (arrayBuffer) {
 							data.expectArrayBuffer = true;
-							window.parent.postMessage(JSON.stringify(data), targetOrigin);
+							window.parent.postMessage(JSON.stringify(data), responseOrigin);
 
 							//Sending multiple transferrable objects would be beneficial,
 							//but keeping it to one to satisfy IE10.
-							window.parent.postMessage(arrayBuffer, targetOrigin, [arrayBuffer]);
+							window.parent.postMessage(arrayBuffer, responseOrigin, [arrayBuffer]);
 						});
 					return;
 				case "formData":
@@ -58,16 +56,28 @@ docReady(function () {
 
 			transformPromise.then(function (responseBody) {
 				data.data = responseBody;
-				window.parent.postMessage(JSON.stringify(data), targetOrigin);
+				window.parent.postMessage(JSON.stringify(data), responseOrigin);
 			});
 
 			return;
 		}
 
-		window.parent.postMessage(JSON.stringify(data), targetOrigin);
+		window.parent.postMessage(JSON.stringify(data), responseOrigin);
 	};
 
-	window.addEventListener("message", function (event) {
+	window.addEventListener("message", function (event, origin) {
+		origin = event.origin || event.originalEvent.origin;
+
+		//Validate the requesting origin.
+		if (hostWebProxyConfig.trustedOriginAuthorities && hostWebProxyConfig.trustedOriginAuthorities.length) {
+			let trusted = false;
+			for (let trustedOriginAuthority of hostWebProxyConfig.trustedOriginAuthorities) {
+				trusted = trusted || RegExp(trustedOriginAuthority, "ig").test(origin);
+			}
+			if (!!!trusted)
+				throw new Error(`The specified origin is not trusted by the HostWebProxy: ${origin}`);
+		}
+
 		if (!event.data)
 			return;
 

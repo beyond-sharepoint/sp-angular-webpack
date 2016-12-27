@@ -38,16 +38,17 @@ module.exports = {
             { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader') },
             { test: /\.json$/, loader: "json-loader" },
             { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=200000&mimetype=application/font-woff&name=[hash].[ext]" },
-            { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader?&name=/fonts/[hash].[ext]" },
+            { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader?name=fonts/[hash].[ext]" },
             { test: /\.(png|jpe?g|gif|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' },
             { test: /\.(html|aspx)$/, loader: 'raw-loader' }
         ]
     },
     output: {
         path: path.join(__dirname, '/dist'),
+        assetsPublicPath: 'http://localhost:8080/',
         publicPath: 'http://localhost:8080/',
-        filename: '/scripts/[name].bundle.js',
-        chunkFilename: '/scripts/[name].bundle.js',
+        filename: 'scripts/[name].bundle.js',
+        chunkFilename: 'scripts/[name].bundle.js',
         devtoolModuleFilenameTemplate: '[absolute-resource-path]',
         pathinfo: true
     },
@@ -57,8 +58,8 @@ module.exports = {
             inject: 'body'
         }),
 
-        new webpack.optimize.CommonsChunkPlugin("vendor", "/scripts/vendor.bundle.js"),
-        new ExtractTextPlugin('/styles/[name].[hash].css', { disable: true }),
+        new webpack.optimize.CommonsChunkPlugin("vendor", "scripts/vendor.bundle.js"),
+        new ExtractTextPlugin('styles/[name].[hash].css', { disable: true }),
         new DashboardPlugin(),
         new OpenBrowserPlugin({ url: 'http://localhost:8080' })
     ],
