@@ -33,7 +33,7 @@ module.exports = {
                 }
             },
             { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader') },
-            { test: /\.json$/, loader: "json-loader" },
+            { test: /\.json$/, loader: "hson-loader" },
             { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=200000&mimetype=application/font-woff&name=[hash].[ext]" },
             { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader?name=fonts/[hash].[ext]" },
             { test: /\.(png|jpe?g|gif|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' },
@@ -57,7 +57,7 @@ module.exports = {
         new ExtractTextPlugin('styles/[name].[hash].css'),
         new webpack.NoErrorsPlugin(),
         new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}}),
+        new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
         new CopyWebpackPlugin([{
             from: path.join(__dirname, '/src/assets')
         }])

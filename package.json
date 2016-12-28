@@ -5,6 +5,7 @@
   "scripts": {
     "build": "rimraf dist && webpack -p --bail --progress --colors --profile --config webpack-app-prod.config.js",
     "build-proxy": "rimraf dist && webpack --bail --progress --profile --config webpack-hostwebproxy.config.js",
+    "configure": "node ./bin/configure.js",
     "deploy-proxy-spo": "npm run build-proxy && node ./bin/deploy-proxy-spo.js",
     "server": "webpack-dashboard -- webpack-dev-server --history-api-fallback --inline --progress",
     "test": "karma start",
@@ -21,6 +22,9 @@
     "url": "https://github.com/beyond-sharepoint/sp-angular-webpack/issues"
   },
   "homepage": "https://github.com/beyond-sharepoint/sp-angular-webpack",
+  "engines": {
+    "node": ">6"
+  },
   "dependencies": {
     "angular": "^1.6.0",
     "angular-loading-bar": "^0.9.0",
@@ -59,12 +63,13 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
     "gauge": "^2.7.2",
+    "hanson": "^1.2.0",
+    "hson-loader": "^2.0.0",
     "html-webpack-inline-source-plugin": "0.0.5",
     "html-webpack-plugin": "^2.7.1",
     "inquirer": "^2.0.0",
     "istanbul-instrumenter-loader": "^1.0.0",
     "jasmine-core": "^2.3.4",
-    "json-loader": "^0.5.4",
     "karma": "^1.1.0",
     "karma-coverage": "^1.0.0",
     "karma-jasmine": "^1.0.2",

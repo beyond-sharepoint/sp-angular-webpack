@@ -28,7 +28,7 @@ module.exports = {
                 }
             },
             { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader') },
-            { test: /\.json$/, loader: "json-loader" },
+            { test: /\.json$/, loader: "hson-loader" },
             {
                 test: /\.aspx$/,
                 loader: 'raw-loader'

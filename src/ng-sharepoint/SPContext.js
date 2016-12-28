@@ -18,10 +18,9 @@ class SPContext {
         this.$crossDomainMessageSink = $crossDomainMessageSink;
         this.siteUrl = siteUrl;
         this.settings = _.defaultsDeep(settings, {
-            apiRootPath: "/_api/",
             contextPath: "/_api/contextinfo",
             proxyPath: "/Shared%20Documents/HostWebProxy.aspx",
-            loginPath: "/_layouts/15/authenticate.aspx",
+            loginUrl: "/_layouts/15/authenticate.aspx",
             authenticationReturnSettings: {},
             headers: {
                 "Accept": "application/json;odata=verbose",
@@ -221,7 +220,7 @@ class SPContext {
         if (SPContexts[siteUrl])
             return SPContexts[siteUrl];
 
-        var result = new SPContext($window, $crossDomainMessageSink, siteUrl, settings);
+        let result = new SPContext($window, $crossDomainMessageSink, siteUrl, settings);
         SPContexts[siteUrl] = result;
         return result;
     }

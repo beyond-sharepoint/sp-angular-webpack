@@ -1,6 +1,18 @@
 {
+    //Indicates the Site Url of your sharepoint online or sharepoint on-prem.
     "siteUrl": "https://baristalabs.sharepoint.com",
+
+    //Site relative url to the HostWebProxy -- you'll be uploading this soon.
     "proxyUrl": "/Shared%20Documents/HostWebProxy.aspx",
-    "trustedOriginAuthorities": [".*"],
+
+    //An Array of trusted origins as RegExp expressions
+    //For instance, if you wanted to trust *.sharepoint.com, and github, you
+    //would use [".*\.sharepoint\.com", ".*\.github\.io"]
+    //But be very specific to only trust those sites you want to use your proxy.
+    "trustedOriginAuthorities": [
+        "https://baristalabs.sharepoint.com",
+        "http://localhost:8080"
+    ],
+    //An array of known site collections to automatically intercept.
     "knownSiteCollections": []
 }
