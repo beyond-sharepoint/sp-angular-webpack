@@ -32,6 +32,7 @@ export const moduleName = MODULE_NAME
 export const definition = {
     sequence: 2,
     name: "File Upload",
+    icon: "fa-upload",
     description: "Demonstrates a file upload operation using a transferable ArrayBuffer for large file uploads.",
     entryState: "samples-file-upload"
 };

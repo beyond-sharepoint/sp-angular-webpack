@@ -34,6 +34,7 @@ export const moduleName = MODULE_NAME
 export const definition = {
     sequence: 1,
     name: "Document Libraries",
-    description: "Demonstrates a simple interaction with SharePoint to retrieve and display Document Libraries contained in the root site collection.",
+    icon: "fa-beer",
+    description: "Demonstrates a simple interaction with SharePoint to retrieve and display Document Libraries contained in the site collection.",
     entryState: "samples-document-libraries"
 };

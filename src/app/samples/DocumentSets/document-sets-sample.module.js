@@ -31,6 +31,7 @@ export const moduleName = MODULE_NAME
 export const definition = {
     sequence: 3,
     name: "Document Sets",
+    icon: "fa-file-archive-o",
     description: "Demonstrates document set creation, population and snapshotting.",
     entryState: "samples-document-sets"
 };
