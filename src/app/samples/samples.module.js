@@ -13,6 +13,7 @@ const modules = requireAll(require.context("./", true, /^\.\/.*?\/.*?\.module\.j
 const moduleNames = [
     'ng-sharepoint',
     'ng-sharepoint-widgets',
+    'vs-repeat',
     'ui.bootstrap',
     'ui.router.state',
 ];

@@ -2,6 +2,11 @@
 
 Starter project for creating apps with client-side technologies in SharePoint using Angular and Webpack
 
+The purpose of this project is three-fold:
+1. Provide a starter project for developers creating SP apps using modern client-side technologies to easily get started with.
+2. Demonstrate an alternative to SharePoint 'apps' and SharePoint data access.
+3. Provide a number of samples to demonstrate the types of solutions that can be created with HTML+JS with sharepoint.
+
 ###Quick Start
 
 ##### Prerequisites
@@ -156,7 +161,7 @@ TODO:
  - [X] Make promises angular promises so that $scope.$apply doesn't need to be run after an await.
  - [X] Add the ability to add an array of known site collections to configuration which will be auto-intercepted via httpinterceptor.
  - [ ] Unit test all the things! (nock them out)
- - [ ] Finish Samples
+ - [ ] Add additional Samples
     - [X] File Upload
     - [ ] File Download with transferrables (Gallery)
     - [ ] Document Set
