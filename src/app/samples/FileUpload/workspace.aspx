@@ -21,16 +21,19 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">File</label>
                 <div class="col-sm-6">
-                    <div class="btn btn-primary pull-right" ng-model="file" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="100MB"
-                        ngf-min-height="100" ngf-select="ctrl.fileSelected($file)">Select an image</div>
-                    <div class="clearfix"></div>
+                    <img class="pull-left" ngf-thumbnail="file" ngf-size="{width: 300, height: 300, quality: 0.9}">
                     <div class="pull-right">
-                        <div data-ng-if="ctrl.selectedFile">
-                            <div><i>{{ctrl.selectedFile.name}}</i></div>
-                            <div class="pull-right"><i>({{ctrl.selectedFile.size | number}}&nbsp;bytes)</i></div>
-                        </div>
-                        <div data-ng-if="!ctrl.selectedFile">
-                            <i>No File Selected</i>
+                        <div class="btn btn-primary pull-right" ng-model="file" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="100MB"
+                            ngf-min-height="100" ngf-select="ctrl.fileSelected($file)">Select an image</div>
+                        <div class="clearfix"></div>
+                        <div class="pull-right">
+                            <div data-ng-if="ctrl.selectedFile">
+                                <div><i>{{ctrl.selectedFile.name}}</i></div>
+                                <div class="pull-right"><i>({{ctrl.selectedFile.size | number}}&nbsp;bytes)</i></div>
+                            </div>
+                            <div data-ng-if="!ctrl.selectedFile">
+                                <i>No File Selected</i>
+                            </div>
                         </div>
                     </div>
                 </div>
