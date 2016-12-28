@@ -26,3 +26,7 @@
 .form-action {
     padding-top: 15px;
 }
+
+.no-underline:hover {
+    text-decoration: none;
+}
