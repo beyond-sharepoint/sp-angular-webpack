@@ -4,11 +4,13 @@ Starter project for creating apps with client-side technologies in SharePoint us
 
 ###Quick Start
 
+##### Prerequisites
 To start developing with SP-Angular-Webpack-Starter you'll need a few things:
 First, make sure you've got a recent version of node.js and git installed.
 
 I also recommend VSCode as an editor, but feel free to use whatever editor suits your fancy.
 
+##### Clone and Install Dependencies
 Next, you'll need to clone the sp-angular-webpack repository and install its dependencies.
 ``` bash
 # clone the repo
@@ -21,6 +23,7 @@ $ cd my-app
 $ npm install
 ```
 
+##### Configure
 Once you have the dependencies installed, let's configure the app to point to your SharePoint tenant.
 
 You can either edit the configuration file located in ./src/HostWebProxy.config.json in a text editor, or use
@@ -29,6 +32,7 @@ the convienant built-in confuration tool.
 $ npm run configure
 ```
 
+##### Build and Deploy HostWebProxy
 Now, let's deploy the proxy file that enables cross-domain communication to your app. This proxy file is a small >15kb file that lives within
 any document library on your SharePoint tenant or on-prem installation. 
 
@@ -53,6 +57,10 @@ You'll find a file named 'HostWebProxy.aspx' within the /dist folder. Simply upl
 
 Once we've got the proxy uploaded we're ready to go.
 
+##### Start
+
+Now we're ready to go, let's start the local watcher and server.
+
 Start the local server.
 ``` bash
 $ npm start
@@ -61,11 +69,11 @@ $ npm start
 At this point a browser will be opened to the sample app. When you navigate to a sample that requires authentication
 with SharePoint Online, you'll be automatically navigated to the login page and back to the app.
 
->Additional steps required for on-prem SharePoint.
+>Additional steps are required for on-prem SharePoint.
 
 ### Development
 
-Once you get a feel for the starter, browse the code within ./src/app/**/*. 
+Once you get a feel for the starter, browse the code within ./src/app/**. 
 
 After you're comfortable with what the starter is doing, using your editor of choice,
 go ahead and start changing the starter to fit your needs, after all, the starter is here to
