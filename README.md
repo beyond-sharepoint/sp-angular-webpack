@@ -33,17 +33,17 @@ $ npm run configure
 ```
 
 ##### Build and Deploy HostWebProxy
-Now, let's deploy the proxy file that enables cross-domain communication to your app. This proxy file is a small >15kb file that lives within
+Now, let's deploy the proxy file that enables cross-domain communication to your app. This proxy file is a small <15kb file that lives within
 any document library on your SharePoint tenant or on-prem installation. 
 
-If you're deploying to SharePoint Online, the starter comes with a npm run script that facilitates this and automatically uses the
+If you're deploying to SharePoint Online, the starter comes with a npm run script that automates deployment and automatically uses the
 proxyUrl you specified in the configuration above. You'll be prompted for your SharePoint Online credentials.
 
 ``` bash
 $ npm run deploy-proxy-spo
 ```
 
-If you're deploying to an on-prem SharePoint farm (or you'd like to perform this step manually),
+If you're deploying to an on-prem SharePoint farm (or you'd like to perform this step manually on SPO),
 you can also build the proxy and simply drag and drop it into the target document library.
 
 ``` bash
@@ -54,6 +54,7 @@ You'll find a file named 'HostWebProxy.aspx' within the /dist folder. Simply upl
 
 > For the two above operations, you'll need at least edit or designer permisions on a target web.
 > Specifically you'll need the 'Add and Customize Pages' Permission Level.
+> Please ensure the target url and the location that the file was copied to match.
 
 Once we've got the proxy uploaded we're ready to go.
 
@@ -68,6 +69,8 @@ $ npm start
 
 At this point a browser will be opened to the sample app. When you navigate to a sample that requires authentication
 with SharePoint Online, you'll be automatically navigated to the login page and back to the app.
+
+The samples provided demonstrate common use cases for interacting with the SharePoint REST services 
 
 >Additional steps are required for on-prem SharePoint.
 
@@ -124,6 +127,22 @@ $ export sp_angular_webpack_password=<yourpassword>
 ```
 
 use SET on windows.
+
+### How it works
+
+To enable cross-domain communication between the app and the SharePoint REST services, a HostWebProxy is deployed to the SharePoint tenant.
+
+This .aspx file enables displaying in an iframe and is loaded by the application.
+
+Messages are passed between the hosting application and the iFrame via the postMessage api. This technique is generally called cross-origin via document messaging
+and is used in numerous places -- from SPO itself (look for SuiteServiceProxy.aspx in devtools/network when browsing a SPO tenant)  to ADAL to the Microsoft Graph api.
+
+Any time a $http call is made in the application, and the base url is the SharePoint tenant, that http call is intercepted and passed through to the
+proxy iframe.
+
+The implementation in this starter is completely custom and also allows large objects to be transferred via the transferrable api (IE10+)
+
+### Roadmap
 
 TODO:
 
