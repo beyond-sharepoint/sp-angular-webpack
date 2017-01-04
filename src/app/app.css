@@ -15,7 +15,7 @@
 
 /* Angular Loading Bar */
 #loading-bar .bar {
-    position: initial;
+    position: top;
     background: rebeccapurple;
 }
 

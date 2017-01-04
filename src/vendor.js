@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'font-awesome/css/font-awesome.css'
 import 'office-ui-fabric-core/dist/css/fabric.css'
 import 'ui-select/dist/select.css'
+import 'angular-loading-bar/build/loading-bar.css'
 
 import 'core-js'
 import 'whatwg-fetch'

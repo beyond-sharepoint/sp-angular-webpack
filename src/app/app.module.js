@@ -29,6 +29,8 @@ angular.module(MODULE_NAME, [
 
             $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|feed|webcal|excel):/);
             $urlRouterProvider.otherwise('/samples');
+
+            //Since we're under sharepoint, we cannot use html5mode
             //$locationProvider.html5Mode(true);
 
             //Some things that improve perf.
@@ -47,7 +49,7 @@ angular.module(MODULE_NAME, [
 
             //delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-            cfpLoadingBarProvider.parentSelector = ".workspace-header";
+            cfpLoadingBarProvider.parentSelector = ".app";
             cfpLoadingBarProvider.includeSpinner = false;
         }])
     .run(['$location', '$timeout', '$rootScope', function ($location, $timeout, $rootScope) {
@@ -61,7 +63,6 @@ angular.module(MODULE_NAME, [
         $rootScope.$on('$stateChangeStart', function (e, toState) {
 
         });
-
     }]);
 
     export default MODULE_NAME;
