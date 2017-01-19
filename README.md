@@ -19,7 +19,7 @@ I also recommend VSCode as an editor, but feel free to use whatever editor suits
 Next, you'll need to clone the sp-angular-webpack repository and install its dependencies.
 ``` bash
 # clone the repo
-$ git clone https://github.com/beyond-sharepoint/sp-angular-webpack/my-app
+$ git clone https://github.com/beyond-sharepoint/sp-angular-webpack/ my-app
 
 # change directory to your app
 $ cd my-app
