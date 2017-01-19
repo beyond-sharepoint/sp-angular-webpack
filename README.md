@@ -190,7 +190,7 @@ TODO:
 
  - Isn't this breaking the app model? Security?
  
-   SharePoint Online uses the [cross-origin document messaging](https://en.wikipedia.org/wiki/Web_Messaging) technique numerous times, as does the MS Graph API. the [ADAL for AngularJS library](https://github.com/AzureAD/azure-activedirectory-library-for-js/blob/master/lib/adal-angular.js) uses the same techniques as this starter.
+   SharePoint Online uses the [cross-origin document messaging](https://en.wikipedia.org/wiki/Web_Messaging) technique numerous times, as does the MS Graph API. The SharePoint Cross-Domain library and the [ADAL for AngularJS library](https://github.com/AzureAD/azure-activedirectory-library-for-js/blob/master/lib/adal-angular.js) uses the same techniques as this starter.
    
    In "app" terms, this starter uses a "Provider Hosted App" approach, but doesn't require the registration of an "App" in SharePoint. This is good in scenarios where organizations might be confused about what the app/addin model is, and doesn't enable apps either directly through not enabling the app management service, inability to configure DNS to allow wildcard subdomains, not obtaining the necessary wildcart SSL cert or for other reasons. For other organizations that do facilitate the app/addin model, this starter does not preclude packaging the built output as a full SharePoint addin. In both cases the development experience is greatly improved by using this starter.
    
