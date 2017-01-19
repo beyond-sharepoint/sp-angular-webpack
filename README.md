@@ -186,7 +186,7 @@ TODO:
    
    There's probably various reasons for that including some instability of Angular 2.x during the RC process and the higher lift that it takes to create Angular 2 components. There's also something to be said about idiomatic JavaScript too.
    
-   Given the popularity of React, its preferred use by the Office 365 team and it's conceptual alignment to ASP.Net components, if time permits I may create a React based starter too.
+   Given the popularity of React, its preferred use by the Office 365 team and it's conceptual alignment to ASP.Net components, if time permits I may create a React based starter as well.
 
  - Isn't this breaking the app model? Security?
  
