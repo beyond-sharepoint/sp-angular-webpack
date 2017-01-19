@@ -177,3 +177,19 @@ TODO:
     - [ ] Test On-Prem (and document steps!)
     - [ ] Deploy-App-SP (Requires NTLM Auth Lib)
     - [ ] Deploy-Proxy-SP (Requires NTLM Auth Lib)
+
+### Frequently Asked Questions (FAQ)
+
+ - Why Angular 1.x? Why not Angular 2?
+   
+   As of this writing (Jan '17) while Angular 2 is out, the ecosystem and available libraries written in Angular 1.x far exceeds that of Angular 2.x.
+   
+   There's probably various reasons for that including some instability of Angular 2.x during the RC process and the higher lift that it takes to create Angular 2 components. There's also something to be said about idiomatic JavaScript too.
+   
+   Given the popularity of React, its preferred use by the Office 365 team and it's conceptual alignment to ASP.Net components, if time permits I may create a React based starter too.
+
+ - Isn't this breaking the app model? Security?
+ 
+   SharePoint Online uses the [cross-origin document messaging](https://en.wikipedia.org/wiki/Web_Messaging) technique numerous times, as does the MS Graph API. the [ADAL for AngularJS library](https://github.com/AzureAD/azure-activedirectory-library-for-js/blob/master/lib/adal-angular.js) uses the same techniques as this starter.
+   
+   In "app" terms, this starter uses a "Provider Hosted App" approach, but doesn't require the registration of an "App" in SharePoint terms. It is in my opinion that the SharePoint conflaguration of an App (add-in) is a strange beast and unparalleled in the web community. In my opinion, SharePoint Online should be treated as a service (SPaaS) and MS should provide HTML+JS based tools/components that provide the SharePoint client side experience that are completely customizable. This starter aims to approach SharePoint developent in these terms. Hopefully the roadmap of SPFx will bring MS provided SharePoint development closer to this angle.
