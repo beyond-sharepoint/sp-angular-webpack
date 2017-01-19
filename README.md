@@ -192,6 +192,6 @@ TODO:
  
    SharePoint Online uses the [cross-origin document messaging](https://en.wikipedia.org/wiki/Web_Messaging) technique numerous times, as does the MS Graph API. the [ADAL for AngularJS library](https://github.com/AzureAD/azure-activedirectory-library-for-js/blob/master/lib/adal-angular.js) uses the same techniques as this starter.
    
-   In "app" terms, this starter uses a "Provider Hosted App" approach, but doesn't require the registration of an "App" in SharePoint. This is good in scenarios where organizations might be confused about an app, but it doesn't preclude packaging the output of this starter as a true SharePoint app.
+   In "app" terms, this starter uses a "Provider Hosted App" approach, but doesn't require the registration of an "App" in SharePoint. This is good in scenarios where organizations might be confused about an app, and doesn't enable it in their organization, but for others it doesn't preclude packaging the output of this starter as a true SharePoint app.
    
    It is in my opinion that the SharePoint conflaguration of an App (add-in) is a strange beast and unparalleled in the web community. In my opinion, SharePoint Online should be treated as a service (SPaaS) and MS should provide HTML+JS based tools/components that provide the SharePoint client side experience that are completely customizable. This starter aims to approach SharePoint developent in these terms. Hopefully the roadmap of SPFx will bring MS provided SharePoint development closer to this angle.
