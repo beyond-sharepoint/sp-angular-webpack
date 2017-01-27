@@ -29,4 +29,4 @@ import 'ngclipboard'
 import 'angular-resizable'
 import 'ui-select'
 
-import 'msgraph-sdk-javascript'
+//import 'msgraph-sdk-javascript'
