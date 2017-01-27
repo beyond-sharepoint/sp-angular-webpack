@@ -15,6 +15,10 @@ First, make sure you've got a recent version of node.js and git installed.
 
 I also recommend VSCode as an editor, but feel free to use whatever editor suits your fancy.
 
+Optionally, your windows based dev box should be configured to the [Microsoft Guidelines for Node.js development](https://github.com/Microsoft/nodejs-guidelines/blob/master/windows-environment.md#compiling-native-addon-modules)
+however, this starter will work without these dependencies. It's only if you would like to use the automated deployment scripts (such as deploy-proxy-spo) where these become necessary -- if you're manually deploying your files,
+no need to install these, but definately suggest it if you're doing node development on windows.
+
 ##### Clone and Install Dependencies
 Next, you'll need to clone the sp-angular-webpack repository and install its dependencies.
 ``` bash
@@ -94,8 +98,6 @@ With the built-in watcher, any changes you make in your editor will cause the ap
 
 Additionally, you can use any ECMAScript 6+ functionality when your building your app. You'll see examples of this
 when browsing the code. The starter automatically transpiles down to ECMAScript 2015 and polyfills anything else in.
-
-Thus, the starter should work on IE10+
 
 ### Testing
 
@@ -204,3 +206,7 @@ TODO:
    In "app" terms, this starter uses a "Provider Hosted App" approach, but doesn't require the registration of an "App" in SharePoint. This is good in scenarios where organizations might be confused about what the app/addin model is, and doesn't enable apps either directly through not enabling the app management service, inability to configure DNS to allow wildcard subdomains, not obtaining the necessary wildcart SSL cert or for other reasons. For other organizations that do facilitate the app/addin model, this starter does not preclude packaging the built output as a full SharePoint addin. In both cases the development experience is greatly improved by using this starter.
    
    It is in my opinion that the SharePoint conflaguration of an App (add-in) is a strange beast and unparalleled in the web community. In my opinion, SharePoint Online should be treated as a service (SPaaS) and MS should provide HTML+JS based tools/components that provide the SharePoint client side experience that are completely customizable. This starter aims to approach SharePoint developent in these terms. Hopefully the roadmap of SPFx will bring MS provided SharePoint development closer to this angle.
+
+- What browsers is this compatible with.
+
+  Modern browsers will work with this starter. IE11 and the latest versions of Edge, Chrome, Safari and Firefox have been tested.
