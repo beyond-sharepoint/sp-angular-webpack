@@ -134,7 +134,13 @@ $ export sp_angular_webpack_username=<yourusername>
 $ export sp_angular_webpack_password=<yourpassword>
 ```
 
-use SET on windows.
+powershell:
+```
+PS> $env:sp_angular_webpack_username="<yourusername>"
+PS> $env:sp_angular_webpack_password="<yourpassword>"
+```
+
+use SET on windows cmd
 
 ### How it works
 
