@@ -72,6 +72,7 @@ module.exports = {
         contentBase: './src/assets',
         historyApiFallback: true,
         inline: true,
-        stats: 'minimal'
+        stats: 'minimal',
+        headers: { "P3P": "CP=\"ALL IND DSP COR ADM CONo CUR CUSo IVAo IVDo PSA PSD TAI TELo OUR SAMo CNT COM INT NAV ONL PHY PRE PUR UNI\"" }
     }
 };
