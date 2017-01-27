@@ -134,7 +134,7 @@ class SPContext {
                     headers: this.getDefaultHeaders(),
                     body: "",
                     resultType: "json",
-                    cache: false
+                    cache: "no-store"
                 });
 
             let contextInfo = _.get(context, "data.d.GetContextWebInformation");
@@ -178,7 +178,7 @@ class SPContext {
             credentials: 'same-origin',
             headers: this.getDefaultHeaders(),
             resultType: "json",
-            cache: false
+            cache: "no-store"
         }, settings);
 
         return channel.invoke('Fetch', mergedSettings);

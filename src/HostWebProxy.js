@@ -14,18 +14,27 @@ docReady(function () {
 		let responseOrigin = hostWebProxyConfig.responseOrigin || "*";
 
 		//If a response object is specified, get the properties
-		if (response) {
+		if (data.result !== "error" && response) {
 			for (let propertyKey of ["ok", "redirected", "status", "statusText", "type", "url"]) {
 				data[propertyKey] = response[propertyKey];
 			}
 
 			data.headers = {};
-			for (let key of response.headers.keys()) {
-				let value = response.headers.getAll(key);
-				if (value.length === 1)
-					data.headers[key] = value[0];
-				else
+			//IE/Edge do not support 'keys', 'entries', 'values', nor '..of'
+			if (typeof response.headers.keys === "function") {
+				for (let key of response.headers.keys()) {
+					let value = response.headers.get(key);
+					if (value.length === 1)
+						data.headers[key] = value[0];
+					else
+						data.headers[key] = value;
+				}
+			}
+			//IE/Edge's Implementation contains a non-standard forEach method
+			else if (typeof response.headers.forEach === "function") {
+				response.headers.forEach(function (value, key) {
 					data.headers[key] = value;
+				});
 			}
 
 			let transformPromise;
@@ -104,18 +113,43 @@ docReady(function () {
 					request.body = _lastTransferredObject;
 				}
 
-				fetch(request.url, request)
+				let fetchRequest = {
+					cache: request.cache,
+					credentials: request.credentials,
+					method: request.method,
+					mode: "same-origin",
+				};
+
+				//IE/Edge fail with a TypeMismatchError when GET 
+				//requests have any body, including null.
+				if (request.method.toUpperCase() !== "GET") {
+					fetchRequest.body = request.body;
+				}
+
+				//IE/Edge fail when the header object is not explictly
+				//a headers object.
+				if (request.headers) {
+					fetchRequest.headers = new Headers();
+					for (let property in request.headers) {
+						fetchRequest.headers.append(property, request.headers[property]);
+					}
+				}
+
+				fetch(request.url, fetchRequest)
 					.then(function (response) {
 						_lastTransferredObject = null;
 						postMessage({
 							postMessageId: request.postMessageId,
 							result: "success"
 						}, request, response);
-					}, function (response) {
+					}, function (err) {
 						_lastTransferredObject = null;
 						postMessage({
 							postMessageId: request.postMessageId,
-							result: "error"
+							result: "error",
+							error: err,
+							message: err.message,
+							name: err.name
 						}, request, response);
 					});
 				break;
