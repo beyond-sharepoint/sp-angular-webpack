@@ -44,6 +44,9 @@ any document library on your SharePoint tenant or on-prem installation.
 If you're deploying to SharePoint Online, the starter comes with a npm run script that automates deployment and automatically uses the
 proxyUrl you specified in the configuration above. You'll be prompted for your SharePoint Online credentials.
 
+> Note: deploy-proxy-spo requires that node-gyp be installed, please follow the installation directions at https://github.com/nodejs/node-gyp
+> and then execute `npm install` once again.
+
 ``` bash
 $ npm run deploy-proxy-spo
 ```
