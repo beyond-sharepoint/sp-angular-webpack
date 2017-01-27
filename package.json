@@ -46,7 +46,6 @@
     "ng-photoswipe": "^0.2.0",
     "ngclipboard": "^1.1.1",
     "office-ui-fabric-core": "^5.1.0",
-    "promise-polyfill": "^6.0.2",
     "urijs": "^1.18.4",
     "whatwg-fetch": "^2.0.2"
   },
