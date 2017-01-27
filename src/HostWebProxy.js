@@ -113,29 +113,30 @@ docReady(function () {
 					request.body = _lastTransferredObject;
 				}
 
-				let fetchRequest = {
+				let fetchRequestInit = {
 					cache: request.cache,
 					credentials: request.credentials,
 					method: request.method,
 					mode: "same-origin",
 				};
 
-				//IE/Edge fail with a TypeMismatchError when GET 
-				//requests have any body, including null.
-				if (request.method.toUpperCase() !== "GET") {
-					fetchRequest.body = request.body;
-				}
-
 				//IE/Edge fail when the header object is not explictly
 				//a headers object.
 				if (request.headers) {
-					fetchRequest.headers = new Headers();
+					fetchRequestInit.headers = new Headers();
 					for (let property in request.headers) {
-						fetchRequest.headers.append(property, request.headers[property]);
+						fetchRequestInit.headers.append(property, request.headers[property]);
 					}
 				}
 
-				fetch(request.url, fetchRequest)
+				//IE/Edge fail with a TypeMismatchError when GET 
+				//requests have any body, including null.
+				if (request.method.toUpperCase() !== "GET") {
+					fetchRequestInit.body = request.body;
+					fetchRequestInit.bodyUsed = true;
+				}
+
+				fetch(request.url, fetchRequestInit)
 					.then(function (response) {
 						_lastTransferredObject = null;
 						postMessage({
