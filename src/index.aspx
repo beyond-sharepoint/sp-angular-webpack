@@ -83,7 +83,7 @@
         <div id="loading-progress">
             <div id="loading-progress-content">
                 <div id="loading-logo">
-                    <img src="images/logo.png"></img>
+                    <img src="images/logo.png"/>
                 </div>
                 <div id="loading-progress-bar" role="progressbar">
                     <div id="progressContainer">

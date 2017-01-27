@@ -34,13 +34,13 @@ class ResourceLoader {
                 }
 
                 $timeout(function () {
-                    resolve(e);
+                    resolve(element);
                 });
             };
 
             element.onerror = function (e) {
                 $timeout(function () {
-                    reject(e);
+                    reject(element);
                 });
             };
 
@@ -58,15 +58,14 @@ class ResourceLoader {
         let self = this;
         return this._loader(src, function () {
             let iframe = self.$document.createElement('iframe');
-
-            iframe.src = src;
+            iframe.tabindex = -1;
+            iframe.style.display = "none";
             iframe.height = 0;
             iframe.width = 0;
-            iframe.tabindex = -1;
-            iframe.style = "display: none;";
-
             if (sandbox)
                 iframe.sandbox = sandbox;
+
+            iframe.src = src;
 
             self.$document.body.appendChild(iframe);
             return iframe;
