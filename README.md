@@ -130,19 +130,19 @@ Ensure that your HostWebProxy settings whitelist the target domain where your fi
 
 If you find yourself deploying often, the following environment variables can be set to minimize typing of credentials.
 
-macOS:
+Linux/macOS:
 ``` bash
 $ export sp_angular_webpack_username=<yourusername>
 $ export sp_angular_webpack_password=<yourpassword>
 ```
 
-powershell:
+PowerShell:
 ```
 PS> $env:sp_angular_webpack_username="<yourusername>"
 PS> $env:sp_angular_webpack_password="<yourpassword>"
 ```
 
-use SET on windows cmd
+Use SET on windows cmd
 
 ### How it works
 
@@ -207,6 +207,12 @@ TODO:
    
    It is in my opinion that the SharePoint conflaguration of an App (add-in) is a strange beast and unparalleled in the web community. In my opinion, SharePoint Online should be treated as a service (SPaaS) and MS should provide HTML+JS based tools/components that provide the SharePoint client side experience that are completely customizable. This starter aims to approach SharePoint developent in these terms. Hopefully the roadmap of SPFx will bring MS provided SharePoint development closer to this angle.
 
-- What browsers is this compatible with.
+- What browsers is this compatible with?
 
   Modern browsers will work with this starter. IE11 and the latest versions of Edge, Chrome, Safari and Firefox have been tested.
+
+- What about static type checking (e.g. TypeScript)?
+
+  This starter comes configured to use [Flow](https://flowtype.org/)-based annotations. Flow provides opt-in type checking with idiomatic JavaScript.
+  
+  Grab the [Flow extentions for VSCode](https://marketplace.visualstudio.com/search?term=flow&target=VSCode&sortBy=Relevance) and you're good to go.
