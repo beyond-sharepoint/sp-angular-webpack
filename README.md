@@ -215,4 +215,4 @@ TODO:
 
   This starter comes configured to use [Flow](https://flowtype.org/)-based annotations. Flow provides opt-in type checking with idiomatic JavaScript.
   
-  Grab the [Flow extentions for VSCode](https://marketplace.visualstudio.com/search?term=flow&target=VSCode&sortBy=Relevance) and you're good to go.
+  Grab one of the [Flow extensions for VSCode](https://marketplace.visualstudio.com/search?term=flow&target=VSCode&sortBy=Relevance), [Visual Studio](https://marketplace.visualstudio.com/search?term=flow&target=VS&sortBy=Relevance), [Atom](https://atom.io/packages/search?q=flow) or your editor of choice and you're good to go.
