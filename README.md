@@ -84,8 +84,6 @@ with SharePoint Online, you'll be automatically navigated to the login page and 
 
 The samples provided demonstrate common use cases for interacting with the SharePoint REST services 
 
->Additional steps are required for on-prem SharePoint.
-
 ### Development
 
 Once you get a feel for the starter, browse the code within ./src/app/**. 
@@ -184,10 +182,10 @@ TODO:
  - [ ] Deployment Scripts
     - [ ] Deploy-App-SPO
     - [X] Deploy-Proxy-SPO
- - [ ] On-Prem Support
-    - [ ] Test On-Prem (and document steps!)
     - [ ] Deploy-App-SP (Requires NTLM Auth Lib)
     - [ ] Deploy-Proxy-SP (Requires NTLM Auth Lib)
+ - [X] On-Prem Support
+    - [X] Test On-Prem (and document steps!)
 
 ### Frequently Asked Questions (FAQ)
 
@@ -216,3 +214,9 @@ TODO:
   This starter comes configured to use [Flow](https://flowtype.org/)-based annotations. Flow provides opt-in type checking with idiomatic JavaScript.
   
   Grab one of the [Flow extensions for VSCode](https://marketplace.visualstudio.com/search?term=flow&target=VSCode&sortBy=Relevance), [Visual Studio](https://marketplace.visualstudio.com/search?term=flow&target=VS&sortBy=Relevance), [Atom](https://atom.io/packages/search?q=flow) or your editor of choice and you're good to go.
+
+- What about SharePoint on-prem?
+
+  This starter works with SharePoint 2013 and later. Simply configure the starter to point to your on-prem farm and place the HostWebProxy.aspx in the corresponding document library.
+  At this point simply run `npm start` at the command line.
+  (deployment scripts for on prem coming soon)
