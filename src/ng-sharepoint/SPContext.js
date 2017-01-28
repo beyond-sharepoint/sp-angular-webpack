@@ -19,7 +19,7 @@ class SPContext {
         this.siteUrl = siteUrl;
         this.settings = _.defaultsDeep(settings, {
             contextPath: "/_api/contextinfo",
-            proxyPath: "/Shared%20Documents/HostWebProxy.aspx",
+            proxyUrl: "/Shared%20Documents/HostWebProxy.aspx",
             loginUrl: "/_layouts/15/authenticate.aspx",
             authenticationReturnSettings: {},
             headers: {
@@ -28,7 +28,7 @@ class SPContext {
             }
         });
 
-        this.proxyFullPath = URI(siteUrl).pathname(this.settings.proxyPath).normalize().toString();
+        this.proxyFullPath = URI(siteUrl).pathname(this.settings.proxyUrl).normalize().toString();
         this.contextFullPath = URI(siteUrl).pathname(this.settings.contextPath).normalize().toString();
     }
 
