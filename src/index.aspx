@@ -2,6 +2,7 @@
 <html ng-app="app" lang="en">
 
 <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=11" />
     <meta charset="UTF-8">
     <title>SP Angular Webpack</title>
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
