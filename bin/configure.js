@@ -2,6 +2,7 @@
 
 const inquirer = require('inquirer');
 const fs = require('fs');
+const URI = require("urijs");
 
 console.log("Configuring sp-angular-webpack...");
 
@@ -29,7 +30,7 @@ inquirer.prompt(questions).then(function (answers) {
         siteUrl: answers.siteUrl,
         proxyUrl: answers.proxyUrl,
         "trustedOriginAuthorities": [
-            answers.siteUrl,
+            URI(answers.siteUrl).normalize().origin(),
             "http://localhost:8080"
         ],
         "knownSiteCollections": []

@@ -28,8 +28,8 @@ class SPContext {
             }
         });
 
-        this.proxyFullPath = URI(siteUrl).pathname(this.settings.proxyUrl).normalize().toString();
-        this.contextFullPath = URI(siteUrl).pathname(this.settings.contextPath).normalize().toString();
+        this.proxyFullPath = URI.joinPaths(this.settings.siteUrl, this.settings.proxyUrl).absoluteTo(this.settings.siteUrl).normalize().toString();
+        this.contextFullPath = URI.joinPaths(this.siteUrl, this.settings.contextPath).absoluteTo(this.siteUrl).normalize().toString();
     }
 
     /**
@@ -200,7 +200,7 @@ class SPContext {
     /**
      * Gets or creates a context for a given siteUrl.
      */
-    static getContext(config, $window, $crossDomainMessageSink, settings) {
+    static getContext(config, $window, $crossDomainMessageSink, targetSiteUrl, settings) {
         //Merge some settings with our config.
         settings = _.defaultsDeep(settings, {
             authenticationReturnSettings: {
@@ -212,16 +212,16 @@ class SPContext {
             loginUrl: config.loginUrl
         });
 
-        //Ensure that we have a good siteUrl.
-        let siteUrl = URI(settings.siteUrl)
+        //Ensure that we have a good targetSiteUrl.
+        targetSiteUrl = URI(targetSiteUrl)
             .normalize()
             .toString();
 
-        if (SPContexts[siteUrl])
-            return SPContexts[siteUrl];
+        if (SPContexts[targetSiteUrl])
+            return SPContexts[targetSiteUrl];
 
-        let result = new SPContext($window, $crossDomainMessageSink, siteUrl, settings);
-        SPContexts[siteUrl] = result;
+        let result = new SPContext($window, $crossDomainMessageSink, targetSiteUrl, settings);
+        SPContexts[targetSiteUrl] = result;
         return result;
     }
 }

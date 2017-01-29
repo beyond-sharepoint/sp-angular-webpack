@@ -5,6 +5,7 @@ import FormLibrary from './FormLibrary.js'
 import SPContext from './SPContext.js'
 import hostWebProxyConfig from '../HostWebProxy.config.json'
 import URI from 'urijs';
+import _ from 'lodash';
 
 const MODULE_NAME = 'ng-sharepoint';
 
@@ -73,31 +74,41 @@ angular.module(MODULE_NAME, [
                     if (!config)
                         return;
 
-
                     config.headers = config.headers || {};
-                    let requestedSiteUrl = URI(config.url).normalize().origin();
+                    let configuredSiteUri = URI($ngSharePointConfig.siteUrl).normalize();
+                    let requestedSiteUri = URI(config.url).normalize();
 
-                    //If this isn't the site we're looking for, let it move along.
-                    if ($ngSharePointConfig.siteUrl !== requestedSiteUrl) {
+                    //If this isn't the origin we're looking for, let it move along.
+                    if (configuredSiteUri.origin() !== requestedSiteUri.origin()) {
                         return config;
                     }
 
                     //Start at the site collection url.
-                    let siteCollectionUrl = requestedSiteUrl;
+                    let siteCollectionUrl = null;
 
                     //Iterate through knownSiteCollections, if the http request's url matches, make that the target siteCollection.
                     let knownSiteCollections = $ngSharePointConfig.knownSiteCollections || [];
+                    knownSiteCollections.push(configuredSiteUri.path());
+                    knownSiteCollections = _.orderBy(knownSiteCollections, null, ['asc']);
+
                     for (let knownSiteCollection of knownSiteCollections) {
 
-                        let fullSiteUrl = URI(knownSiteCollection)
-                            .absoluteTo(requestedSiteUrl)
+                        let knownFullSiteUrl = URI(knownSiteCollection)
+                            .absoluteTo(requestedSiteUri.origin())
                             .normalize()
-                            .toString() + "/";
+                            .toString();
 
-                        if (URI.commonPath(config.url, fullSiteUrl) === fullSiteUrl)
-                            siteCollectionUrl = fullSiteUrl;
+                        if (!knownFullSiteUrl.endsWith("/"))
+                            knownFullSiteUrl += "/";
+
+                        if (requestedSiteUri.toString().startsWith(knownFullSiteUrl))
+                            siteCollectionUrl = knownFullSiteUrl;
                     }
 
+                    if (!siteCollectionUrl) {
+                        return config;
+                    }
+                    
                     //Indicate that we've intercepted this http request.
                     config.__isNgSharePointIntercepted = true;
 
@@ -105,7 +116,7 @@ angular.module(MODULE_NAME, [
                         $ngSharePointConfig,
                         $window,
                         $crossDomainMessageSink,
-                        { siteUrl: siteCollectionUrl }
+                        siteCollectionUrl
                     );
 
                     //Change the Accept header to one that returns a JSON response, rather than the odata default.
@@ -119,7 +130,8 @@ angular.module(MODULE_NAME, [
 
                         switch (bodyType) {
                             case '[object ArrayBuffer]':
-                                preFetchTasks.push(context.transfer(config.body));
+                                //preFetchTasks.push(context.transfer(config.body));
+                                preFetchTasks.push(function(){ console.log("xfered"); debugger;})
                                 config._useTransferObjectAsBody = true;
                                 break;
                             case '[object File]':
