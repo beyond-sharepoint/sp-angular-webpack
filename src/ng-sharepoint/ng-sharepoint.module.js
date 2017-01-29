@@ -130,8 +130,7 @@ angular.module(MODULE_NAME, [
 
                         switch (bodyType) {
                             case '[object ArrayBuffer]':
-                                //preFetchTasks.push(context.transfer(config.body));
-                                preFetchTasks.push(function(){ console.log("xfered"); debugger;})
+                                preFetchTasks.push(context.transfer(config.body));
                                 config._useTransferObjectAsBody = true;
                                 break;
                             case '[object File]':
