@@ -44,6 +44,16 @@ $ npm run configure
 If you want to enable communication to additional site collections, simply add those server-relative urls to the knownSiteCollections
 array within ./src/HostWebProxy.config.json.
 
+for instance:
+
+``` json
+"knownSiteCollections": [
+  "/",
+  "/sites/mysitecollection1",
+  "/sites/mysitecollection2"
+]
+```
+
 ##### Build and Deploy HostWebProxy
 Now, let's deploy the proxy file that enables cross-domain communication to your app. This proxy file is a small <15kb file that lives within
 any document library on your SharePoint tenant or on-prem installation. 
