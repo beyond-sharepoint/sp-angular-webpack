@@ -99,7 +99,7 @@
     "webpack-dev-server": "^1.16.2"
   },
   "optionalDependencies": {
-    "@beyond-sharepoint/spo-remote-auth": "^0.1.0",
-    "@beyond-sharepoint/ntlm-remote-auth": "^0.1.0"
+    "@beyond-sharepoint/spo-remote-auth": "^0.1.2",
+    "@beyond-sharepoint/ntlm-remote-auth": "^0.1.1"
   }
 }
