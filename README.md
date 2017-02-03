@@ -1,3 +1,4 @@
+![David](https://david-dm.org/beyond-sharepoint/sp-angular-webpack.svg)
 # sp-angular-webpack-starter
 
 Starter project for creating apps with client-side technologies in SharePoint using Angular and Webpack
