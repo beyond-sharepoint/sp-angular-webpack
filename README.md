@@ -15,10 +15,6 @@ First, make sure you've got a recent version of node.js and git installed.
 
 I also recommend VSCode as an editor, but feel free to use whatever editor suits your fancy.
 
-Optionally, your windows based dev box should be configured to the [Microsoft Guidelines for Node.js development](https://github.com/Microsoft/nodejs-guidelines/blob/master/windows-environment.md#compiling-native-addon-modules)
-however, this starter will work without these dependencies. It's only if you would like to use the automated deployment scripts (such as deploy-proxy-spo) where these become necessary -- if you're manually deploying your files,
-no need to install these, but definately suggest it if you're doing node development on windows.
-
 ##### Clone and Install Dependencies
 Next, you'll need to clone the sp-angular-webpack repository and install its dependencies.
 ``` bash
@@ -60,9 +56,6 @@ any document library on your SharePoint tenant or on-prem installation.
 
 If you're deploying to SharePoint Online, the starter comes with a npm run script that automates deployment and automatically uses the
 proxyUrl you specified in the configuration above. You'll be prompted for your SharePoint Online credentials.
-
-> Note: deploy-proxy-spo requires that node-gyp be installed, please follow the installation directions at https://github.com/nodejs/node-gyp
-> and then execute `npm install` once again.
 
 ``` bash
 $ npm run deploy-proxy-spo
