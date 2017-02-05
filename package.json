@@ -52,7 +52,7 @@
     "whatwg-fetch": "^2.0.2"
   },
   "devDependencies": {
-    "@beyond-sharepoint/spo-remote-auth": "^0.1.4",
+    "@beyond-sharepoint/spo-remote-auth": "^0.1.7",
     "@beyond-sharepoint/ntlm-remote-auth": "^0.1.13",
     "angular-mocks": "^1.6.1",
     "autoprefixer": "^6.7.0",
