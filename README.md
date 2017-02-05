@@ -61,8 +61,13 @@ proxyUrl you specified in the configuration above. You'll be prompted for your S
 $ npm run deploy-proxy-spo
 ```
 
-If you're deploying to an on-prem SharePoint farm (or you'd like to perform this step manually on SPO),
-you can also build the proxy and simply drag and drop it into the target document library.
+If you're deploying to an on-prem SharePoint farm, run this script instead. You'll be prompted for domain credentials.
+
+``` bash
+$ npm run deploy-proxy-sp
+```
+
+It's possible to also just build the proxy and drag and drop it into the target document library using a browser.
 
 ``` bash
 $ npm run build-proxy
@@ -189,7 +194,7 @@ TODO:
     - [ ] Deploy-App-SPO
     - [X] Deploy-Proxy-SPO
     - [ ] Deploy-App-SP (Requires NTLM Auth Lib)
-    - [ ] Deploy-Proxy-SP (Requires NTLM Auth Lib)
+    - [X] Deploy-Proxy-SP (Requires NTLM Auth Lib)
  - [X] On-Prem Support
     - [X] Test On-Prem (and document steps!)
 

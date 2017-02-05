@@ -6,6 +6,7 @@
     "build": "rimraf dist && webpack -p --bail --progress --colors --profile --config webpack-app-prod.config.js",
     "build-proxy": "rimraf dist && webpack --bail --progress --profile --config webpack-hostwebproxy.config.js && rimraf dist/HostWebProxy.js",
     "configure": "node ./bin/configure.js",
+    "deploy-proxy-sp": "npm run build-proxy && node ./bin/deploy-proxy-sp.js",
     "deploy-proxy-spo": "npm run build-proxy && node ./bin/deploy-proxy-spo.js",
     "flow": "flow; test $? -eq 0 -o $? -eq 2",
     "server": "webpack-dashboard -- webpack-dev-server --history-api-fallback --inline --progress",
@@ -51,8 +52,8 @@
     "whatwg-fetch": "^2.0.2"
   },
   "devDependencies": {
-    "@beyond-sharepoint/spo-remote-auth": "^0.1.3",
-    "@beyond-sharepoint/ntlm-remote-auth": "^0.1.3",
+    "@beyond-sharepoint/spo-remote-auth": "^0.1.4",
+    "@beyond-sharepoint/ntlm-remote-auth": "^0.1.13",
     "angular-mocks": "^1.6.1",
     "autoprefixer": "^6.7.0",
     "babel-core": "^6.22.1",
