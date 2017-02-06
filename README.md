@@ -20,7 +20,7 @@ I also recommend VSCode as an editor, but feel free to use whatever editor suits
 Next, you'll need to clone the sp-angular-webpack repository and install its dependencies.
 ``` bash
 # clone the repo
-$ git clone https://github.com/beyond-sharepoint/sp-angular-webpack/ my-app
+$ git clone -o sp-angular-webpack -b master --single-branch https://github.com/beyond-sharepoint/sp-angular-webpack/ my-app
 
 # change directory to your app
 $ cd my-app
@@ -116,6 +116,17 @@ If you'd like to unit test your app, the starter is configured with karma and us
 To run your unit tests and get code coverage results, simply run:
 ``` bash
 $ npm test
+```
+
+### Updating
+
+Down the road you can fetch and merge the recent changes from this repo back into your project:
+
+``` bash
+$ git checkout master
+$ git fetch spo-angular-webpack
+$ git merge spo-angular-webpack/master
+$ npm install
 ```
 
 ### Deployment
