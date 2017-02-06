@@ -12,15 +12,13 @@ const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 
 module.exports = {
     name: 'app-dev',
-    debug: true,
     devtool: 'cheap-module-eval-source-map',
     entry: {
-        'vendor': ['babel-polyfill', 'core-js', './src/vendor.js'],
+        'vendor': ['babel-polyfill', 'whatwg-fetch', './src/vendor.js'],
         'app': './src/app.js'
     },
     module: {
-        preLoaders: [],
-        loaders: [
+        rules: [
             //Delicious ES2015 code, made simple for simpleton browsers.
             {
                 test: /\.js$/,
@@ -35,7 +33,16 @@ module.exports = {
                     ]
                 }
             },
-            { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader') },
+            {
+                test: /\.css$/,
+                loader: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        'css-loader?sourceMap',
+                        'postcss-loader'
+                    ]
+                })
+            },
             { test: /\.json$/, loader: "hson-loader" },
             { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=200000&mimetype=application/font-woff&name=[hash].[ext]" },
             { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader?name=fonts/[hash].[ext]" },
@@ -45,7 +52,6 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, '/dist'),
-        assetsPublicPath: 'http://localhost:8080/',
         publicPath: 'http://localhost:8080/',
         filename: 'scripts/[name].bundle.js',
         chunkFilename: 'scripts/[name].bundle.js',
@@ -57,16 +63,26 @@ module.exports = {
             template: './src/index.aspx',
             inject: 'body'
         }),
-
-        new webpack.optimize.CommonsChunkPlugin("vendor", "scripts/vendor.bundle.js"),
-        new ExtractTextPlugin('styles/[name].[hash].css', { disable: true }),
-        new DashboardPlugin(),
-        new OpenBrowserPlugin({ url: 'http://localhost:8080' })
-    ],
-    postcss: [
-        autoprefixer({
-            browsers: ['last 2 version']
-        })
+        new webpack.optimize.CommonsChunkPlugin({
+            name: "vendor",
+            filename: "scripts/vendor.bundle.[hash].js"
+        }),
+        new ExtractTextPlugin({
+            filename: 'styles/[name].[hash].css',
+            disable: true
+        }),
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                context: __dirname,
+                output: { path: './' },
+                postcss: [
+                    autoprefixer({
+                        browsers: ['last 2 version']
+                    })
+                ]
+            }
+        }),
+        new DashboardPlugin()
     ],
     devServer: {
         contentBase: './src/assets',

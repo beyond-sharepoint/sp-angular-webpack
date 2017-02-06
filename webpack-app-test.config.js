@@ -11,22 +11,21 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
     name: 'app-test',
     devtool: 'inline-source-map',
-    entry: {},
     module: {
-        preLoaders: [
+        rules: [
+            //Preloader
             {
                 test: /\.js$/,
+                enforce: "pre",
                 exclude: [
                     /node_modules/,
                     /\.spec\.js$/
                 ],
-                loader: 'istanbul-instrumenter',
+                loader: 'istanbul-instrumenter-loader',
                 query: {
                     esModules: true
                 }
-            }
-        ],
-        loaders: [
+            },
             //Delicious ES2015 code, made simple for simpleton browsers.
             {
                 test: /\.js$/,
@@ -50,9 +49,15 @@ module.exports = {
         ]
     },
     output: {},
-    postcss: [
-        autoprefixer({
-            browsers: ['last 2 version']
+    plugins: [
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                postcss: [
+                    autoprefixer({
+                        browsers: ['last 2 version']
+                    })
+                ]
+            }
         })
     ]
 };

@@ -12,12 +12,11 @@ module.exports = {
     name: 'app-prod',
     devtool: 'hidden-source-map',
     entry: {
-        'vendor': ['babel-polyfill', './src/vendor.js'],
+        'vendor': ['babel-polyfill', 'whatwg-fetch', './src/vendor.js'],
         'app': './src/app.js'
     },
     module: {
-        preLoaders: [],
-        loaders: [
+        rules: [
             //Delicious ES2015 code, made simple for simpleton browsers.
             {
                 test: /\.js$/,
@@ -32,7 +31,16 @@ module.exports = {
                     ]
                 }
             },
-            { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader') },
+            {
+                test: /\.css$/,
+                loader: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        'css-loader',
+                        'postcss-loader'
+                    ]
+                })
+            },
             { test: /\.json$/, loader: "hson-loader" },
             { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=200000&mimetype=application/font-woff&name=[hash].[ext]" },
             { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader?name=fonts/[hash].[ext]" },
@@ -42,7 +50,6 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, '/dist'),
-        assetsPublicPath: '',
         publicPath: '',
         filename: 'scripts/[name].[hash].js',
         chunkFilename: 'scripts/[name].[hash].js'
@@ -53,18 +60,31 @@ module.exports = {
             inject: 'body',
             filename: 'index.aspx'
         }),
-        new webpack.optimize.CommonsChunkPlugin("vendor", "scripts/vendor.bundle.js"),
-        new ExtractTextPlugin('styles/[name].[hash].css'),
-        new webpack.NoErrorsPlugin(),
-        new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: "vendor",
+            filename: "scripts/vendor.bundle.[hash].js"
+        }),
+        new ExtractTextPlugin({
+            filename: 'styles/[name].[hash].css'
+        }),
+        new webpack.NoEmitOnErrorsPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+            sourceMap: true,
+            compress: { warnings: false }
+        }),
         new CopyWebpackPlugin([{
             from: path.join(__dirname, '/src/assets')
-        }])
-    ],
-    postcss: [
-        autoprefixer({
-            browsers: ['last 2 version']
-        })
+        }]),
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                context: __dirname,
+                output: { path: './' },
+                postcss: [
+                    autoprefixer({
+                        browsers: ['last 2 version']
+                    })
+                ]
+            }
+        }),
     ]
 };

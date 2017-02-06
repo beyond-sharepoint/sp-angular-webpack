@@ -11,15 +11,14 @@ module.exports = {
     name: 'host-web-proxy',
     entry: ['babel-polyfill', 'whatwg-fetch', './src/HostWebProxy.js'],
     module: {
-        preLoaders: [],
-        loaders: [
+        rules: [
             //Delicious ES2015 code, made simple for simpleton browsers.
             {
                 test: /\.js$/,
                 exclude: /(node_modules|bower_components)/,
                 loader: 'babel-loader',
                 query: {
-                    presets: ['es2015'],
+                    presets: [["es2015", { "modules": false }]],
                     plugins: [
                         "transform-runtime",
                         "transform-async-to-generator",
@@ -27,7 +26,16 @@ module.exports = {
                     ]
                 }
             },
-            { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader') },
+            {
+                test: /\.css$/,
+                loader: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        'css-loader?sourceMap',
+                        'postcss-loader'
+                    ]
+                })
+            },
             { test: /\.json$/, loader: "hson-loader" },
             {
                 test: /\.aspx$/,
@@ -48,13 +56,19 @@ module.exports = {
             inlineSource: '.(js|css)$' // embed all javascript and css inline
         }),
         new HtmlWebpackInlineSourcePlugin(),
-        new webpack.NoErrorsPlugin(),
-        new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } })
-    ],
-    postcss: [
-        autoprefixer({
-            browsers: ['last 2 version']
+        new webpack.NoEmitOnErrorsPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+            sourceMap: true,
+            compress: { warnings: false }
+        }),
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                postcss: [
+                    autoprefixer({
+                        browsers: ['last 2 version']
+                    })
+                ]
+            }
         })
-    ],
+    ]
 };

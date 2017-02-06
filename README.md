@@ -52,7 +52,7 @@ for instance:
 ```
 
 ##### Build and Deploy HostWebProxy
-Now, let's deploy the proxy file that enables cross-domain communication to your app. This proxy file is a small <15kb file that lives within
+Now, let's deploy the proxy file that enables cross-domain communication to your app. This proxy file is a small ~110kb file that lives within
 any document library on your SharePoint tenant or on-prem installation. 
 
 If you're deploying to SharePoint Online, the starter comes with a npm run script that automates deployment and automatically uses the

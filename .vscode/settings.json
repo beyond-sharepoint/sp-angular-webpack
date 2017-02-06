@@ -7,5 +7,6 @@
         "**/dist": true,
         "**/coverage": true,
         "**/tmp": true
-    }
+    },
+    "vsicons.presets.angular": false
 }

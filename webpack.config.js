@@ -13,6 +13,5 @@ if (ENV === 'test' || ENV === 'test-watch') {
 }
 
 module.exports = [
-  appConfig,
-  require('./webpack-hostwebproxy.config')
+  appConfig
 ]
