@@ -65,7 +65,8 @@ module.exports = {
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: "vendor",
-            filename: "scripts/vendor.bundle.[hash].js"
+            filename: "scripts/vendor.bundle.[hash].js",
+            minChunks: Infinity,
         }),
         new ExtractTextPlugin({
             filename: 'styles/[name].[hash].css',
