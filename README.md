@@ -124,8 +124,8 @@ Down the road you can fetch and merge the recent changes from this repo back int
 
 ``` bash
 $ git checkout master
-$ git fetch spo-angular-webpack
-$ git merge spo-angular-webpack/master
+$ git fetch sp-angular-webpack
+$ git merge sp-angular-webpack/master
 $ npm install
 ```
 

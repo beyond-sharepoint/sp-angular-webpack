@@ -1,7 +1,7 @@
 'use strict';
 
 // Modules
-const path = require("path");
+const path = require('path');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
