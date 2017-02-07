@@ -1,6 +1,6 @@
 //Entry point for loading any css/libraries.
 //Makes app.bundle.js smaller to ease debugging as well.
-import 'bootstrap/dist/css/bootstrap.css'
+import 'angular-material/angular-material.css'
 import 'font-awesome/css/font-awesome.css'
 import 'office-ui-fabric-core/dist/css/fabric.css'
 import 'ui-select/dist/select.css'
@@ -17,7 +17,7 @@ import 'angular'
 import 'angular-animate'
 import 'angular-sanitize'
 import 'angular-ui-router'
-import 'angular-ui-bootstrap'
+import 'angular-material'
 import 'angular-ui-grid/ui-grid.js'
 import 'angular-ui-grid/ui-grid.css'
 import 'angular-ui-grid/ui-grid.woff'
@@ -28,5 +28,3 @@ import 'ng-file-upload'
 import 'ngclipboard'
 import 'angular-resizable'
 import 'ui-select'
-
-//import 'msgraph-sdk-javascript'

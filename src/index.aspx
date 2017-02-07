@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>SP Angular Webpack</title>
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <base href=".">
     <style>
         .ng-hide {
@@ -84,7 +84,7 @@
         <div id="loading-progress">
             <div id="loading-progress-content">
                 <div id="loading-logo">
-                    <img src="images/logo.png"/>
+                    <img src="images/logo.png" />
                 </div>
                 <div id="loading-progress-bar" role="progressbar">
                     <div id="progressContainer">
@@ -95,9 +95,8 @@
             </div>
         </div>
     </div>
-    <div data-ng-if="__applicationIsLoaded">
-        <app></app>
-    </div>
+    <app data-ng-if="__applicationIsLoaded">
+    </app>
 </body>
 
 </html>

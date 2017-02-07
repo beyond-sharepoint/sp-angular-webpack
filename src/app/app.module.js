@@ -8,7 +8,7 @@ import './app.css';
 import AppCtrl from './AppCtrl.js'
 
 //import sub-modules...
-import samples from './samples/samples.module.js';
+import mainDashboard from './main-dashboard/main-dashboard.module.js';
 
 const MODULE_NAME = 'app';
 
@@ -16,7 +16,7 @@ angular.module(MODULE_NAME, [
    angularUIRouter,
    'angular-loading-bar',
    ngSharePoint,
-   samples
+   mainDashboard
 ])
     .controller('AppCtrl', [ AppCtrl ])
     .component('app', {
@@ -24,11 +24,15 @@ angular.module(MODULE_NAME, [
         controller: 'AppCtrl',
         controllerAs: 'app'
     })
-    .config(['$provide', '$stateProvider', '$locationProvider', '$httpProvider', '$urlRouterProvider', '$compileProvider', 'cfpLoadingBarProvider',
-        function ($provide, $stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $compileProvider, cfpLoadingBarProvider) {
+    .config(['$provide', '$stateProvider', '$locationProvider', '$httpProvider', '$urlRouterProvider', '$compileProvider', 'cfpLoadingBarProvider', '$mdThemingProvider',
+        function ($provide, $stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $compileProvider, cfpLoadingBarProvider, $mdThemingProvider) {
 
+            //Set the Material Design theme
+            $mdThemingProvider.theme('default')
+                .primaryPalette('blue');
+                
             $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|feed|webcal|excel):/);
-            $urlRouterProvider.otherwise('/samples');
+            $urlRouterProvider.otherwise('/');
 
             //Since we're under sharepoint, we cannot use html5mode
             //$locationProvider.html5Mode(true);
