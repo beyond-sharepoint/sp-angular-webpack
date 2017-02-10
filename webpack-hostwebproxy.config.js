@@ -57,10 +57,6 @@ module.exports = {
         }),
         new HtmlWebpackInlineSourcePlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
-        new webpack.optimize.UglifyJsPlugin({
-            sourceMap: true,
-            compress: { warnings: false }
-        }),
         new webpack.LoaderOptionsPlugin({
             options: {
                 postcss: [

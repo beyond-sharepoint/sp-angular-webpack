@@ -4,7 +4,7 @@
   "description": "A starter for SharePoint and Angular made with Webpack",
   "scripts": {
     "build": "rimraf dist && webpack -p --bail --progress --colors --profile --config webpack-app-prod.config.js",
-    "build-proxy": "rimraf dist && webpack --bail --progress --profile --config webpack-hostwebproxy.config.js && rimraf dist/HostWebProxy.js",
+    "build-proxy": "rimraf dist && webpack -p --bail --progress --profile --config webpack-hostwebproxy.config.js && rimraf dist/HostWebProxy.js",
     "configure": "node ./bin/configure.js",
     "dashboard": "webpack-dashboard -- webpack-dev-server --progress --open",
     "deploy-proxy-sp": "npm run build-proxy && node ./bin/deploy-proxy-sp.js",

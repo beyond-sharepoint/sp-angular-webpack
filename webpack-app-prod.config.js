@@ -69,10 +69,6 @@ module.exports = {
             filename: 'styles/[name].[hash].css'
         }),
         new webpack.NoEmitOnErrorsPlugin(),
-        new webpack.optimize.UglifyJsPlugin({
-            sourceMap: true,
-            compress: { warnings: false }
-        }),
         new CopyWebpackPlugin([{
             from: path.join(__dirname, '/src/assets')
         }]),
