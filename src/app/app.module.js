@@ -13,12 +13,12 @@ import mainDashboard from './main-dashboard/main-dashboard.module.js';
 const MODULE_NAME = 'app';
 
 angular.module(MODULE_NAME, [
-   angularUIRouter,
-   'angular-loading-bar',
-   ngSharePoint,
-   mainDashboard
+    angularUIRouter,
+    'angular-loading-bar',
+    ngSharePoint,
+    mainDashboard
 ])
-    .controller('AppCtrl', [ AppCtrl ])
+    .controller('AppCtrl', ['$http', AppCtrl])
     .component('app', {
         template: require('./app.aspx'),
         controller: 'AppCtrl',
@@ -30,7 +30,7 @@ angular.module(MODULE_NAME, [
             //Set the Material Design theme
             $mdThemingProvider.theme('default')
                 .primaryPalette('blue');
-                
+
             $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|feed|webcal|excel):/);
             $urlRouterProvider.otherwise('/');
 
@@ -69,4 +69,4 @@ angular.module(MODULE_NAME, [
         });
     }]);
 
-    export default MODULE_NAME;
+export default MODULE_NAME;
