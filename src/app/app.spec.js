@@ -28,7 +28,7 @@ describe('app', () => {
         expect(result).toBe(42);
         done();
       }, (err) => {
-        done(err);
+        done.fail(err);
       });
       httpBackend.flush();
     });
