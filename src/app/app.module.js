@@ -8,31 +8,27 @@ import './app.css';
 import AppCtrl from './AppCtrl.js'
 
 //import sub-modules...
-import mainDashboard from './main-dashboard/main-dashboard.module.js';
+import samples from './samples/samples.module.js';
 
 const MODULE_NAME = 'app';
 
 angular.module(MODULE_NAME, [
-    angularUIRouter,
-    'angular-loading-bar',
-    ngSharePoint,
-    mainDashboard
+   angularUIRouter,
+   'angular-loading-bar',
+   ngSharePoint,
+   samples
 ])
-    .controller('AppCtrl', ['$http', AppCtrl])
+    .controller('AppCtrl', [AppCtrl])
     .component('app', {
         template: require('./app.aspx'),
         controller: 'AppCtrl',
         controllerAs: 'app'
     })
-    .config(['$provide', '$stateProvider', '$locationProvider', '$httpProvider', '$urlRouterProvider', '$compileProvider', 'cfpLoadingBarProvider', '$mdThemingProvider',
-        function ($provide, $stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $compileProvider, cfpLoadingBarProvider, $mdThemingProvider) {
-
-            //Set the Material Design theme
-            $mdThemingProvider.theme('default')
-                .primaryPalette('blue');
+    .config(['$provide', '$stateProvider', '$locationProvider', '$httpProvider', '$urlRouterProvider', '$compileProvider', 'cfpLoadingBarProvider',
+        function ($provide, $stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $compileProvider, cfpLoadingBarProvider) {
 
             $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|feed|webcal|excel):/);
-            $urlRouterProvider.otherwise('/');
+            $urlRouterProvider.otherwise('/samples');
 
             //Since we're under sharepoint, we cannot use html5mode
             //$locationProvider.html5Mode(true);

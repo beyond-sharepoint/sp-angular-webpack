@@ -1,6 +1,5 @@
 class AppCtrl {
-  constructor($http) {
-    this.$http = $http;
+  constructor() {
     this.url = 'https://github.com/beyond-sharepoint/sp-angular-webpack';
     this.workspaces = [
       {
