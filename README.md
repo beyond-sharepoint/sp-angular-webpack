@@ -241,5 +241,4 @@ TODO:
 - What about SharePoint on-prem?
 
   This starter works with SharePoint 2013 and later. Simply configure the starter to point to your on-prem farm and place the HostWebProxy.aspx in the corresponding document library.
-  At this point simply run `npm start` at the command line.
-  (deployment scripts for on prem coming soon)
+  At this point simply run `npm start` at the command line. There is an NPM scripts for deploying the proxy file to SP On-Prem, execute ```npm run deploy-proxy-sp```
