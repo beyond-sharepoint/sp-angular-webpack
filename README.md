@@ -8,7 +8,7 @@ The purpose of this project is three-fold:
  2. Demonstrate an alternative to SharePoint 'apps' and SharePoint REST service access.
  3. Provide a number of samples to demonstrate the types of solutions that can be created with HTML+JS with sharepoint.
 
-###Quick Start
+### Quick Start
 
 ##### Prerequisites
 To start developing with SP-Angular-Webpack-Starter you'll need a few things:
