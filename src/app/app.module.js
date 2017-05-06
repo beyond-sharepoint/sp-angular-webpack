@@ -7,18 +7,14 @@ import ngSharePointWidgets from '../ng-sharepoint-widgets/ng-sharepoint-widgets.
 import './app.css';
 import AppCtrl from './AppCtrl.js'
 
-//import sub-modules...
-import samples from './samples/samples.module.js';
-
 const MODULE_NAME = 'app';
 
 angular.module(MODULE_NAME, [
    angularUIRouter,
    'angular-loading-bar',
-   ngSharePoint,
-   samples
+   ngSharePoint
 ])
-    .controller('AppCtrl', ['$http', AppCtrl])
+    .controller('AppCtrl', [AppCtrl])
     .component('app', {
         template: require('./app.aspx'),
         controller: 'AppCtrl',
@@ -28,7 +24,7 @@ angular.module(MODULE_NAME, [
         function ($provide, $stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $compileProvider, cfpLoadingBarProvider) {
 
             $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|feed|webcal|excel):/);
-            $urlRouterProvider.otherwise('/samples');
+            $urlRouterProvider.otherwise('/');
 
             //Since we're under sharepoint, we cannot use html5mode
             //$locationProvider.html5Mode(true);
@@ -58,6 +54,7 @@ angular.module(MODULE_NAME, [
         //Give the impression that we're loading...
         $timeout(function () {
             $rootScope.__applicationIsLoaded = true;
+            console.log("loaded!");
         }, 500);
 
         $rootScope.$on('$stateChangeStart', function (e, toState) {
