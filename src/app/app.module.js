@@ -54,7 +54,6 @@ angular.module(MODULE_NAME, [
         //Give the impression that we're loading...
         $timeout(function () {
             $rootScope.__applicationIsLoaded = true;
-            console.log("loaded!");
         }, 500);
 
         $rootScope.$on('$stateChangeStart', function (e, toState) {
