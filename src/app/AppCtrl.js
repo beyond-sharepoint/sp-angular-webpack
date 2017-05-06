@@ -1,8 +1,6 @@
 class AppCtrl {
   constructor($http) {
     this.$http = $http;
-    if (this.$http === undefined)
-      throw "mooseballs.";
 
     this.url = 'https://github.com/beyond-sharepoint/sp-angular-webpack';
     this.workspaces = [
