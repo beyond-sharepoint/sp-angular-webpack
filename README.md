@@ -165,6 +165,15 @@ PS> $env:sp_angular_webpack_password="<yourpassword>"
 
 Use SET on windows cmd
 
+When using SharePoint on-prem, the following environment variables are used for NTLM based auth:
+
+``` bash
+$ export sp_angular_webpack_workstation=<yourusername>
+$ export sp_angular_webpack_domain=<yourpassword>
+$ export sp_angular_webpack_username=<yourusername>
+$ export sp_angular_webpack_password=<yourpassword>
+```
+
 ### How it works
 
 To enable cross-domain communication between the app and the SharePoint REST services, a HostWebProxy is deployed to the SharePoint tenant.
