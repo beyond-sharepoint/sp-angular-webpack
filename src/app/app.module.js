@@ -1,5 +1,5 @@
 import angular from 'angular'
-import angularUIRouter from 'angular-ui-router'
+import angularUIRouter from '@uirouter/angularjs'
 import ngSharePoint from '../ng-sharepoint/ng-sharepoint.module.js'
 import ngSharePointWidgets from '../ng-sharepoint-widgets/ng-sharepoint-widgets.module.js'
 
@@ -18,7 +18,7 @@ angular.module(MODULE_NAME, [
    ngSharePoint,
    samples
 ])
-    .controller('AppCtrl', [AppCtrl])
+    .controller('AppCtrl', ['$http', AppCtrl])
     .component('app', {
         template: require('./app.aspx'),
         controller: 'AppCtrl',
