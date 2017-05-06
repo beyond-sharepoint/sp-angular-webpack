@@ -238,6 +238,8 @@ TODO:
   
   Grab one of the [Flow extensions for VSCode](https://marketplace.visualstudio.com/search?term=flow&target=VSCode&sortBy=Relevance), [Visual Studio](https://marketplace.visualstudio.com/search?term=flow&target=VS&sortBy=Relevance), [Atom](https://atom.io/packages/search?q=flow) or your editor of choice and you're good to go.
 
+Update 2017-05-06: TypeScript now supports [gradual migration](https://blogs.msdn.microsoft.com/typescript/2017/04/27/announcing-typescript-2-3/) this makes typescript more compelling in a JS-first world and the //@ts-check comment can be added without any changes to this project.
+
 - What about SharePoint on-prem?
 
   This starter works with SharePoint 2013 and later. Simply configure the starter to point to your on-prem farm and place the HostWebProxy.aspx in the corresponding document library.
