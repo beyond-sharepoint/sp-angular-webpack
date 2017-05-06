@@ -122,6 +122,20 @@ angular.module(MODULE_NAME, [
                     //Change the Accept header to one that returns a JSON response, rather than the odata default.
                     config.headers.Accept = "application/json;odata=verbose";
 
+                    config.params = config.params || {};
+
+                    //Bust the cache in IE
+                    //config.params.v = (new Date()).getTime();
+
+                    //As fetch doesn't support params, pull in the params and append the url with them.
+                    if (config.params) {
+                            config.url += (config.url.indexOf('?') === -1 ? '?' : '&') + Object.keys(config.params)
+                                .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(config.params[k]))
+                                .join('&');
+
+                            delete config.params;
+                    }
+
                     let delayedRequest = $q.defer();
 
                     let preFetchTasks = [];
