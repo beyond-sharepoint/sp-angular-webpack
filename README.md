@@ -109,6 +109,10 @@ With the built-in watcher, any changes you make in your editor will cause the ap
 Additionally, you can use any ECMAScript 6+ functionality when your building your app. You'll see examples of this
 when browsing the code. The starter automatically transpiles down to ECMAScript 2015 and polyfills anything else in.
 
+There are a few branches that contain common scenarios:
+
+ - [blank](https://github.com/beyond-sharepoint/sp-angular-webpack/tree/blank) - Provides a blank starter without the sample code.
+ - [blank-material-design](https://github.com/beyond-sharepoint/sp-angular-webpack/tree/blank-material-design) - Blank starter but with angular-material instead of angular-boostrap
 ### Testing
 
 If you'd like to unit test your app, the starter is configured with karma and uses .spec.js files located in your app. 
