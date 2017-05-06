@@ -5,7 +5,7 @@ Starter project for creating apps with client-side technologies in SharePoint us
 
 The purpose of this project is three-fold:
  1. Provide a starter project for developers creating SP apps using modern client-side technologies to easily get started with.
- 2. Demonstrate an alternative to SharePoint 'apps' and SharePoint REST service access.
+ 2. Demonstrate an alternative to SharePoint 'apps' and SharePoint REST service access via [web messaging](https://en.wikipedia.org/wiki/Web_Messaging).
  3. Provide a number of samples to demonstrate the types of solutions that can be created with HTML+JS with sharepoint.
 
 ### Quick Start
