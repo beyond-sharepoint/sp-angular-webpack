@@ -12,7 +12,8 @@ const MODULE_NAME = 'app';
 angular.module(MODULE_NAME, [
    angularUIRouter,
    'angular-loading-bar',
-   ngSharePoint
+   ngSharePoint,
+   'ngMaterial'
 ])
     .controller('AppCtrl', [AppCtrl])
     .component('app', {
@@ -54,7 +55,6 @@ angular.module(MODULE_NAME, [
         //Give the impression that we're loading...
         $timeout(function () {
             $rootScope.__applicationIsLoaded = true;
-            console.log("loaded!");
         }, 500);
 
         $rootScope.$on('$stateChangeStart', function (e, toState) {
