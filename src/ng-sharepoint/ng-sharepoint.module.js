@@ -26,7 +26,7 @@ angular.module(MODULE_NAME, [
         '$window',
         '$crossDomainMessageSink',
         FormLibrary])
-    .provider('$ngSharePointConfig', function () {
+    .provider('$ngSharePointConfig', () => {
         let defaults = {
             siteUrl: hostWebProxyConfig.siteUrl,
             proxyUrl: hostWebProxyConfig.proxyUrl || "/Shared%20Documents/HostWebProxy.aspx",
@@ -43,15 +43,15 @@ angular.module(MODULE_NAME, [
 
         return {
             defaults: defaults,
-            $get: function () {
+            $get: () => {
                 return defaults;
             }
         };
     })
     .factory('$SPContext', ['$ngSharePointConfig', '$window', '$crossDomainMessageSink',
-        function ($ngSharePointConfig, $window, $crossDomainMessageSink) {
+        ($ngSharePointConfig, $window, $crossDomainMessageSink) => {
             return {
-                getContext: function (settings) {
+                getContext: (settings) => {
                     return SPContext.getContext(
                         $ngSharePointConfig,
                         $window,
@@ -67,10 +67,10 @@ angular.module(MODULE_NAME, [
         '$crossDomainMessageSink',
         '$rootScope',
         '$q',
-        function ($ngSharePointConfig, $window, $crossDomainMessageSink, $rootScope, $q) {
+        ($ngSharePointConfig, $window, $crossDomainMessageSink, $rootScope, $q) => {
 
             let requestInterceptor = {
-                request: function (config) {
+                request: async (config) => {
                     if (!config)
                         return;
 
@@ -108,7 +108,7 @@ angular.module(MODULE_NAME, [
                     if (!siteCollectionUrl) {
                         return config;
                     }
-                    
+
                     //Indicate that we've intercepted this http request.
                     config.__isNgSharePointIntercepted = true;
 
@@ -122,70 +122,41 @@ angular.module(MODULE_NAME, [
                     //Change the Accept header to one that returns a JSON response, rather than the odata default.
                     config.headers.Accept = "application/json;odata=verbose";
 
-                    config.params = config.params || {};
-
                     //Bust the cache in IE
-                    //config.params.v = (new Date()).getTime();
+                    config.params = config.params || {};
+                    config.params.v = (new Date()).getTime();
 
                     //As fetch doesn't support params, pull in the params and append the url with them.
                     if (config.params) {
-                            config.url += (config.url.indexOf('?') === -1 ? '?' : '&') + Object.keys(config.params)
-                                .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(config.params[k]))
-                                .join('&');
+                        config.url += (config.url.indexOf('?') === -1 ? '?' : '&') + Object.keys(config.params)
+                            .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(config.params[k]))
+                            .join('&');
 
-                            delete config.params;
+                        delete config.params;
                     }
 
                     let delayedRequest = $q.defer();
 
-                    let preFetchTasks = [];
-                    if (config.body) {
-                        let bodyType = Object.prototype.toString.call(config.body);
-
-                        switch (bodyType) {
-                            case '[object ArrayBuffer]':
-                                preFetchTasks.push(context.transfer(config.body));
-                                config._useTransferObjectAsBody = true;
-                                break;
-                            case '[object File]':
-                                let convertBlobtoArrayBuffer = new Promise((resolve, reject) => {
-                                    let reader = new FileReader();
-                                    reader.addEventListener("loadend", function () {
-                                        let arrayBuffer = reader.result;
-                                        preFetchTasks.push(context.transfer(arrayBuffer));
-                                        config._useTransferObjectAsBody = true;
-                                        resolve();
-                                    });
-                                    reader.readAsArrayBuffer(config.body);
-                                });
-                                preFetchTasks.push(convertBlobtoArrayBuffer);
-                                break;
-                            default:
-                                //Do Nothing.
-                                break;
-                        }
+                    try {
+                        let response = await context.fetch(config);
+                        config.response = response;
+                        //Short-circuit the original http request
+                        config.method = "GET";
+                        config.cache = {
+                            get: () => {
+                                return null;
+                            }
+                        };
+                        delayedRequest.resolve(config);
                     }
-
-                    Promise.all(preFetchTasks)
-                        .then(() => context.fetch(config))
-                        .then(function (response) {
-                            config.response = response;
-                            //Short-circuit the original http request
-                            config.method = "GET";
-                            config.cache = {
-                                get: function () {
-                                    return null;
-                                }
-                            };
-                            delayedRequest.resolve(config);
-                        }, function (errDesc, error) {
-                            config.data = errDesc + "|" + error;
-                            delayedRequest.reject(config);
-                        });
+                    catch (err) {
+                        config.data = err;
+                        delayedRequest.reject(config);
+                    }
 
                     return delayedRequest.promise;
                 },
-                response: function (response) {
+                response: (response) => {
                     if (!response.config.__isNgSharePointIntercepted)
                         return response;
 
@@ -212,31 +183,25 @@ angular.module(MODULE_NAME, [
 
             return requestInterceptor;
         }])
-    .config(['$httpProvider', function ($httpProvider) {
+    .config(['$httpProvider', ($httpProvider) => {
         $httpProvider.interceptors.push('$ngSharePointInterceptor');
     }])
     .run([
         '$ngSharePointConfig', '$window', '$rootScope',
-        function (ngSharePointConfig, $window, $rootScope) {
+        (ngSharePointConfig, $window, $rootScope) => {
 
             /**
              * Listen to messages coming from other windows performing a postMessages and rebroadcast as angular messages.
              */
-            angular.element($window).bind('message', function (event) {
+            angular.element($window).bind('message', (event) => {
                 event = event.originalEvent || event;
-                if (event && event.data) {
-                    let response = null;
-                    $rootScope.sender = event.source;
-                    try {
-                        response = angular.fromJson(event.data);
-                    } catch (ex) {
-                        response = {};
-                        response.text = event.data;
-                    }
-                    response.origin = event.origin;
+                if (!event || !event.data || !event.data.postMessageId || !event.data.postMessageId.startsWith("SP.RequestExecutor_"))
+                    return;
+                
+                let response = event.data;
+                response.origin = event.origin;
 
-                    $rootScope.$root.$broadcast(ngSharePointConfig.crossDomainMessageSink.incomingMessageName, response);
-                }
+                $rootScope.$root.$broadcast(ngSharePointConfig.crossDomainMessageSink.incomingMessageName, response);
             });
         }
     ]);

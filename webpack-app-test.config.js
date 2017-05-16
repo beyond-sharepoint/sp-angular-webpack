@@ -34,9 +34,10 @@ module.exports = {
                 query: {
                     presets: ['es2015'],
                     plugins: [
-                        "transform-runtime",
-                        "transform-async-to-generator",
-                        "transform-flow-strip-types"
+                        "transform-async-to-bluebird",
+                        "transform-promise-to-bluebird",
+                        "transform-flow-strip-types",
+                        "transform-runtime"
                     ]
                 }
             },

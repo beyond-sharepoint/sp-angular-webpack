@@ -16,30 +16,30 @@ class ResourceLoader {
          * @param createElement a custom function that performs the actual resource loading for a given dom element.
          * @returns {*} Promise that will be resolved once the resource has been loaded.
          */
-        this._loader = function (url, createElement) {
+        this._loader = (url, createElement) => {
 
             if (this._promises[url])
                 return this._promises[url];
 
             let resolve, reject;
-            let promise = new Promise(function () {
-                resolve = arguments[0];
-                reject = arguments[1];
+            let promise = new Promise((innerRequest, innerReject) => {
+                resolve = innerRequest;
+                reject = innerReject;
             });
             let element = createElement(url);
 
-            element.onload = element.onreadystatechange = function (e) {
+            element.onload = element.onreadystatechange = (e) => {
                 if (element.readyState && element.readyState !== 'complete' && element.readyState !== 'loaded') {
                     return;
                 }
 
-                $timeout(function () {
+                $timeout(() => {
                     resolve(element);
                 });
             };
 
-            element.onerror = function (e) {
-                $timeout(function () {
+            element.onerror = (e) => {
+                $timeout(() => {
                     reject(element);
                 });
             };
@@ -55,9 +55,8 @@ class ResourceLoader {
      * @returns {*} Promise that will be resolved once the iframe has been loaded.
      */
     loadIFrame(src, sandbox) {
-        let self = this;
-        return this._loader(src, function () {
-            let iframe = self.$document.createElement('iframe');
+        return this._loader(src, () => {
+            let iframe = this.$document.createElement('iframe');
             iframe.tabindex = -1;
             iframe.style.display = "none";
             iframe.height = 0;
@@ -67,7 +66,7 @@ class ResourceLoader {
 
             iframe.src = src;
 
-            self.$document.body.appendChild(iframe);
+            this.$document.body.appendChild(iframe);
             return iframe;
         });
     }
@@ -78,14 +77,12 @@ class ResourceLoader {
      * @returns {*} Promise that will be resolved once the script has been loaded.
      */
     loadScript(src) {
-        let self = this;
-
-        return this._loader(src, function () {
-            let script = self.$document.createElement('script');
+        return this._loader(src, () => {
+            let script = this.$document.createElement('script');
 
             script.src = src;
 
-            self.$document.body.appendChild(script);
+            this.$document.body.appendChild(script);
             return script;
         });
     }
@@ -96,16 +93,14 @@ class ResourceLoader {
      * @returns {*} Promise that will be resolved once the CSS file has been loaded.
      */
     loadCSS(href) {
-        let self = this;
-
-        return this._loader(href, function () {
-            let style = self.$document.createElement('link');
+        return this._loader(href, () => {
+            let style = this.$document.createElement('link');
 
             style.rel = 'stylesheet';
             style.type = 'text/css';
             style.href = href;
 
-            self.$document.head.appendChild(style);
+            this.$document.head.appendChild(style);
             return style;
         });
     }
