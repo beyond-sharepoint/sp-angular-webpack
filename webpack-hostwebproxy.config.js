@@ -2,14 +2,12 @@
 
 const path = require("path");
 const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     name: 'host-web-proxy',
-    entry: ['babel-polyfill', 'whatwg-fetch', './src/HostWebProxy.js'],
+    entry: ['whatwg-fetch', './src/HostWebProxy.js'],
     module: {
         rules: [
             //Delicious ES2015 code, made simple for simpleton browsers.
@@ -25,16 +23,6 @@ module.exports = {
                         "transform-flow-strip-types"
                     ]
                 }
-            },
-            {
-                test: /\.css$/,
-                loader: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [
-                        'css-loader?sourceMap',
-                        'postcss-loader'
-                    ]
-                })
             },
             { test: /\.json$/, loader: "hson-loader" },
             {
@@ -56,15 +44,6 @@ module.exports = {
             inlineSource: '.(js|css)$' // embed all javascript and css inline
         }),
         new HtmlWebpackInlineSourcePlugin(),
-        new webpack.NoEmitOnErrorsPlugin(),
-        new webpack.LoaderOptionsPlugin({
-            options: {
-                postcss: [
-                    autoprefixer({
-                        browsers: ['last 2 version']
-                    })
-                ]
-            }
-        })
+        new webpack.NoEmitOnErrorsPlugin()
     ]
 };

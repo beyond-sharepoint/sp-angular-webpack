@@ -2,9 +2,13 @@ import angular from 'angular'
 import angularUIRouter from '@uirouter/angularjs'
 import ngSharePoint from '../ng-sharepoint/ng-sharepoint.module.js'
 
-//Import App styles, controls, etc.
-import './app.css';
-import AppCtrl from './AppCtrl.js'
+//Import config
+import hostWebProxyConfig from '../HostWebProxy.config.json'
+
+//Import Components
+import appComponent from './app.component'
+
+import URI from 'urijs';
 
 const MODULE_NAME = 'app';
 
@@ -14,12 +18,18 @@ angular.module(MODULE_NAME, [
    ngSharePoint,
    'ngMaterial'
 ])
-    .controller('AppCtrl', [AppCtrl])
-    .component('app', {
-        template: require('./app.aspx'),
-        controller: 'AppCtrl',
-        controllerAs: 'app'
-    })
+    .value('$sharepointBaseUrl', (function () {
+        //Do some magic so that if the origin of the proxy url is the same as the current url, assume the site is one step up.
+        let targetUri = URI(hostWebProxyConfig.siteUrl);
+        let currentUri = URI();
+        if (targetUri.origin() === currentUri.origin()) {
+            var siteUri = currentUri.segment(-2, "");
+            return siteUri.origin() + siteUri.directory();
+        }
+        //Otherwise, use the configured site url.
+        return hostWebProxyConfig.siteUrl;
+    })())
+    .component('app', appComponent)
     .config(['$provide', '$stateProvider', '$locationProvider', '$httpProvider', '$urlRouterProvider', '$compileProvider', 'cfpLoadingBarProvider',
         function ($provide, $stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $compileProvider, cfpLoadingBarProvider) {
 
@@ -37,13 +47,6 @@ angular.module(MODULE_NAME, [
             if (!$httpProvider.defaults.headers.get) {
                 $httpProvider.defaults.headers.get = {};
             }
-
-            //disable IE ajax request caching
-            //$httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
-            //$httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
-            //$httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
-
-            //delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
             cfpLoadingBarProvider.parentSelector = ".app";
             cfpLoadingBarProvider.includeSpinner = false;

@@ -32,6 +32,15 @@ class SPContext {
         this.contextFullPath = URI.joinPaths(this.siteUrl, this.settings.contextPath).absoluteTo(this.siteUrl).normalize().toString();
     }
 
+    str2ab(str) {
+        let len = str.length;
+        let bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+            bytes[i] = str.charCodeAt(i);
+        }
+        return bytes.buffer;
+    }
+
     /**
      * Returns a header object of the default headers defined in the settings plus the X-RequestDigest value.
      * If a headers object is supplied, it is merged with default headers.
@@ -117,7 +126,7 @@ class SPContext {
                 this.$window.open(authUri, "_top");
 
                 //Return a promise that won't resolve while this page is navigating.
-                return new Promise(function () { });
+                return new Promise(() => { });
             }
 
             //Unknown error -- throw the exception.
@@ -133,7 +142,6 @@ class SPContext {
                     credentials: 'same-origin',
                     headers: this.getDefaultHeaders(),
                     body: "",
-                    resultType: "json",
                     cache: "no-store"
                 });
 
@@ -177,24 +185,43 @@ class SPContext {
             method: "GET",
             credentials: 'same-origin',
             headers: this.getDefaultHeaders(),
-            resultType: "json",
             cache: "no-store"
         }, settings);
 
+        mergedSettings = _.omit(mergedSettings, ["paramSerializer", "transformRequest", "transformResponse"]);
+
+        if (mergedSettings.body) {
+            let bodyType = Object.prototype.toString.call(mergedSettings.body);
+
+            switch (bodyType) {
+                case '[object ArrayBuffer]':
+                    //Do Nothing.
+                    break;
+                case '[object Blob]':
+                case '[object File]':
+                    //Convert the blob into an array buffer.
+                    let convertBlobtoArrayBuffer = new Promise((resolve, reject) => {
+                        let reader = new FileReader();
+                        reader.onload = () => {
+                            resolve(reader.result)
+                        }
+                        reader.onerror = () => {
+                            reject(reader.error)
+                        }
+                        reader.readAsArrayBuffer(mergedSettings.body);
+                    });
+
+                    mergedSettings.body = await convertBlobtoArrayBuffer;
+                    break;
+                default:
+                    mergedSettings.body = this.str2ab(mergedSettings.body);
+                    break;
+            }
+
+            return channel.invoke('Fetch', mergedSettings, undefined, undefined, "body");
+        }
+
         return channel.invoke('Fetch', mergedSettings);
-    };
-
-    /**
-     * Transfers an array buffer to the proxy.
-     * Use this method when large amounts of data need to be used by fetch.
-     */
-    async transfer(buffer) {
-        if (!buffer || Object.prototype.toString.call(buffer) !== '[object ArrayBuffer]')
-            throw new Error("An ArrayBuffer must be specified as the first argument.");
-
-        let channel = await this.ensureContext();
-
-        return await channel.transfer(buffer);
     };
 
     /**
