@@ -102,8 +102,15 @@ class Channel {
                 if (response.data) {
                     let contentType = response.headers["content-type"];
                     if (contentType.startsWith("application/json")) {
-                        let str = this.ab2str(response.data);
-                        response.data = JSON.parse(str);
+                        response.data = this.ab2str(response.data);
+                        if (response.data.length > 0) {
+                            try
+                            {
+                                response.data = JSON.parse(response.data);
+                            }
+                            catch(ex) {
+                            }
+                        }
                     } else if (contentType.startsWith("text")) {
                         response.data = this.ab2str(response.data);
                     }
