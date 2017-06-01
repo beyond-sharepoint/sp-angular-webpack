@@ -1,7 +1,7 @@
 import angular from 'angular'
 import angularUIRouter from '@uirouter/angularjs'
 import ngSharePoint from '../ng-sharepoint/ng-sharepoint.module.js'
-import ngSharePointWidgets from '../ng-sharepoint-widgets/ng-sharepoint-widgets.module.js'
+import ngSharePointWidgets from '../ng-sharepoint-widgets'
 
 //Import config
 import hostWebProxyConfig from '../HostWebProxy.config.json'
@@ -22,17 +22,9 @@ angular.module(MODULE_NAME, [
     ngSharePoint,
     samples
 ])
-    .value('$sharepointBaseUrl', (function () {
-        //Do some magic so that if the origin of the proxy url is the same as the current url, assume the site is one step up.
-        let targetUri = URI(hostWebProxyConfig.siteUrl);
-        let currentUri = URI();
-        if (targetUri.origin() === currentUri.origin()) {
-            var siteUri = currentUri.segment(-2, "");
-            return siteUri.origin() + siteUri.directory();
-        }
-        //Otherwise, use the configured site url.
-        return hostWebProxyConfig.siteUrl;
-    })())
+    .factory('$sharepointBaseUrl', ['$ngSharePointConfig', function ($ngSharePointConfig) {
+        return $ngSharePointConfig.siteUrl;
+    }])
     .component('app', appComponent)
     .config(['$provide', '$stateProvider', '$locationProvider', '$httpProvider', '$urlRouterProvider', '$compileProvider', 'cfpLoadingBarProvider',
         function ($provide, $stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $compileProvider, cfpLoadingBarProvider) {

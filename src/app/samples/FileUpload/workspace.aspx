@@ -15,7 +15,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">Document Library</label>
                 <div class="col-sm-6">
-                    <ngsp-Document-Library-Picker site-url="{{ctrl.siteUrl}}" document-library='ctrl._documentLibrary'></ngsp-Document-Library-Picker>
+                    <uib-document-library-picker ng-model='ctrl._documentLibrary'></uib-document-library-picker>
                 </div>
             </div>
             <div class="form-group">
