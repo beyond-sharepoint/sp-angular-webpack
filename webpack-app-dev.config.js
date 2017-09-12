@@ -22,7 +22,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 loader: 'babel-loader',
-                exclude: /(node_modules|bower_components)/,
+                exclude: /(node_modules|bower_components|src\/api)/,
                 query: {
                     presets: ['es2015'],
                     plugins: [
@@ -51,7 +51,6 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, '/dist'),
-        publicPath: 'http://localhost:8080/',
         filename: 'scripts/[name].bundle.js',
         chunkFilename: 'scripts/[name].bundle.js',
         devtoolModuleFilenameTemplate: '[absolute-resource-path]',
@@ -64,7 +63,7 @@ module.exports = {
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: "vendor",
-            filename: "scripts/vendor.bundle.[hash].js",
+            filename: "scripts/vendor.bundle.js",
             minChunks: Infinity,
         }),
         new ExtractTextPlugin({
@@ -87,6 +86,7 @@ module.exports = {
     devServer: {
         contentBase: './src/assets',
         historyApiFallback: true,
+        host: 'localhost',        
         inline: true,
         stats: 'minimal',
         headers: { "P3P": "CP=\"ALL IND DSP COR ADM CONo CUR CUSo IVAo IVDo PSA PSD TAI TELo OUR SAMo CNT COM INT NAV ONL PHY PRE PUR UNI\"" }

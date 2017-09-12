@@ -19,7 +19,8 @@ module.exports = {
                 enforce: "pre",
                 exclude: [
                     /node_modules/,
-                    /\.spec\.js$/
+                    /\.spec\.js$/,
+                    /src\/api/
                 ],
                 loader: 'istanbul-instrumenter-loader',
                 query: {
@@ -29,7 +30,7 @@ module.exports = {
             //Delicious ES2015 code, made simple for simpleton browsers.
             {
                 test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
+                exclude: /(node_modules|bower_components|src\/api)/,
                 loader: 'babel-loader',
                 query: {
                     presets: ['es2015'],
@@ -42,7 +43,7 @@ module.exports = {
                 }
             },
             { test: /\.css$/, loader: 'null-loader' },
-            { test: /\.json$/, loader: "hson-loader" },
+            { test: /\.(json|jsd|jsontxt)$/, loader: "hson-loader" },
             { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=200000&mimetype=application/font-woff&name=[hash].[ext]" },
             { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader?&name=/fonts/[hash].[ext]" },
             { test: /\.(png|jpe?g|gif|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' },
