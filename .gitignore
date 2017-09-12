@@ -2,3 +2,4 @@ node_modules
 dist
 coverage
 gh-pages
+src/HostWebProxy.config.dev.json

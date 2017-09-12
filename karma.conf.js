@@ -41,7 +41,8 @@ module.exports = function karmaConfig (config) {
       dir: 'coverage/',
       reporters: [
         {type: 'text-summary'},
-        {type: 'html'}
+        {type: 'html'},
+        { type: 'cobertura', subdir: '.', file: 'cobertura.txt' }
       ]
     },
 

@@ -20,7 +20,7 @@ module.exports = {
             //Delicious ES2015 code, made simple for simpleton browsers.
             {
                 test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
+                exclude: /(node_modules|bower_components|src\/api)/,
                 loader: 'babel-loader',
                 query: {
                     presets: ['es2015'],
@@ -36,7 +36,7 @@ module.exports = {
                 loader: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [
-                        'css-loader',
+                        'css-loader?sourceMap',
                         'postcss-loader'
                     ]
                 })
@@ -71,6 +71,10 @@ module.exports = {
         new webpack.NoEmitOnErrorsPlugin(),
         new CopyWebpackPlugin([{
             from: path.join(__dirname, '/src/assets')
+        }]),
+        new CopyWebpackPlugin([{
+            from: path.join(__dirname, '/src/api'),
+            to: 'api/'
         }]),
         new webpack.LoaderOptionsPlugin({
             options: {

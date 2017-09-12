@@ -1,6 +1,6 @@
 import angular from 'angular'
 import angularUIRouter from '@uirouter/angularjs'
-import ngSharePoint from '../ng-sharepoint/ng-sharepoint.module.js'
+import ngSharePoint from '../ng-sharepoint'
 import ngSharePointWidgets from '../ng-sharepoint-widgets'
 
 //Import config

@@ -100,13 +100,13 @@ class Channel {
             }
             else {
                 if (response.data) {
-                    let contentType = response.headers["content-type"];
+                    let contentType = response.headers["content-type"] || response.headers["Content-Type"];
                     if (contentType.startsWith("application/json")) {
-                        response.data = this.ab2str(response.data);
-                        if (response.data.length > 0) {
+                        let str = this.ab2str(response.data);
+                        if (str.length > 0) {
                             try
                             {
-                                response.data = JSON.parse(response.data);
+                                response.data = JSON.parse(str);
                             }
                             catch(ex) {
                             }

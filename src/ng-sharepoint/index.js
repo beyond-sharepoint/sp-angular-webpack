@@ -27,8 +27,18 @@ angular.module(MODULE_NAME, [
         '$crossDomainMessageSink',
         FormLibrary])
     .provider('$ngSharePointConfig', () => {
+
+        let targetUri = URI(hostWebProxyConfig.siteUrl);
+        let currentUri = URI();
+        let siteUrl = hostWebProxyConfig.siteUrl;
+
+        if (targetUri.origin() === currentUri.origin()) {
+            let siteUri = currentUri.segment(-2, "");
+            siteUrl = siteUri.origin() + siteUri.directory();
+        }
+
         let defaults = {
-            siteUrl: hostWebProxyConfig.siteUrl,
+            siteUrl: siteUrl,
             proxyUrl: hostWebProxyConfig.proxyUrl || "/Shared%20Documents/HostWebProxy.aspx",
             loginUrl: "/_layouts/15/authenticate.aspx",
             crossDomainMessageSink: {
@@ -120,7 +130,8 @@ angular.module(MODULE_NAME, [
                     );
 
                     //Change the Accept header to one that returns a JSON response, rather than the odata default.
-                    config.headers.Accept = "application/json;odata=verbose";
+                    if (config.headers.Accept === "application/json, text/plain, */*")
+                        config.headers.Accept = "application/json;odata=verbose";
 
                     //Bust the cache in IE
                     config.params = config.params || {};

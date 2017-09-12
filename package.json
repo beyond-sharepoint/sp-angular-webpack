@@ -7,6 +7,7 @@
     "build-proxy": "rimraf dist && webpack -p --bail --progress --profile --config webpack-hostwebproxy.config.js && rimraf dist/HostWebProxy.js",
     "configure": "node ./bin/configure.js",
     "dashboard": "webpack-dashboard -- webpack-dev-server --progress --open",
+    "deploy-api": "node ./bin/deploy-api.js",
     "deploy-proxy-sp": "npm run build-proxy && node ./bin/deploy-proxy-sp.js",
     "deploy-proxy-spo": "npm run build-proxy && node ./bin/deploy-proxy-spo.js",
     "flow": "flow; test $? -eq 0 -o $? -eq 2",

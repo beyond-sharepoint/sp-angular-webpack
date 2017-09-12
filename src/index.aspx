@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>SP Angular Webpack</title>
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <base href=".">
     <style>
         .ng-hide {
@@ -95,7 +95,7 @@
             </div>
         </div>
     </div>
-    <div data-ng-if="__applicationIsLoaded">
+    <div ng-cloak="" data-ng-if="__applicationIsLoaded">
         <app></app>
     </div>
 </body>
